@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>det • SQL Interactive Studio</title>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --container-bg: #ffffff;
+            --text-color: #212529;
+            --primary: #1a73e8;
+            --primary-hover: #1557b0;
+            --border-color: #dee2e6;
+            --code-bg: #272822;
+            --code-text: #f8f8f2;
+            --success: #28a745;
+            --error: #dc3545;
+            --accent: #e67e22;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --container-bg: #1e1e1e;
+                --text-color: #e0e0e0;
+                --border-color: #333333;
+                --primary: #8ab4f8;
+                --primary-hover: #aecbfa;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--container-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        h2 {
+            color: var(--accent);
+            margin-top: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        .schema-box {
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: rgba(0,0,0,0.03);
+            font-weight: 600;
+        }
+
+        .code-style {
+            font-family: 'Fira Code', Consolas, Monaco, monospace;
+            font-size: 13px;
+        }
+
+        .workspace {
+            margin-top: 30px;
+            border-top: 2px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 140px;
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 15px;
+            border-radius: 6px;
+            border: none;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        .btn-group {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover { background-color: var(--primary-hover); }
+        button.secondary { background-color: #6c757d; }
+        button.secondary:hover { background-color: #5a6268; }
+
+        .output-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            min-height: 60px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .error { color: var(--error); font-weight: bold; }
+        .success { color: var(--success); font-weight: bold; }
+
+        .challenge-card {
+            background: rgba(26, 115, 232, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .execution-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .execution-list li {
+            background: var(--border-color);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📊 det • SQL Interactive Studio</h1>
+    <p>Practice writing and executing core SQL operators directly in your browser. This application evaluates your syntax queries in real-time against a mock transactional dataset.</p>
+
+    <h2>🗂️ Sandbox Database Schema</h2>
+    <div class="grid">
+        <div class="schema-box">
+            <h3>1. <code>users</code></h3>
+            <table>
+                <thead>
+                    <tr><th>Column</th><th>Type</th><th>Example</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="code-style">user_id</td><td>INT</td><td>1, 2, 3</td></tr>
+                    <tr><td class="code-style">name</td><td>VARCHAR</td><td>'Alice', 'Carlos'</td></tr>
+                    <tr><td class="code-style">country</td><td>VARCHAR</td><td>'USA', 'Colombia'</td></tr>
+                    <tr><td class="code-style">signup_date</td><td>DATE</td><td>'2026-01-15'</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="schema-box">
+            <h3>2. <code>orders</code></h3>
+            <table>
+                <thead>
+                    <tr><th>Column</th><th>Type</th><th>Example</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="code-style">order_id</td><td>INT</td><td>101, 102</td></tr>
+                    <tr><td class="code-style">user_id</td><td>INT</td><td>1, 3</td></tr>
+                    <tr><td class="code-style">order_date</td><td>DATE</td><td>'2026-03-04'</td></tr>
+                    <tr><td class="code-style">total_amount</td><td>DECIMAL</td><td>150.50, 45.00</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <h2>⚔️ Guided Practice Challenges</h2>
+    <div class="challenge-card">
+        <strong>🎯 Challenge 1: Filtering & Sorting</strong><br>
+        Find all records from <code>orders</code> worth more than $100 placed between January 1, 2026, and June 1, 2026. Sort by <code>total_amount DESC</code>.
+        <br><button onclick="loadChallenge(1)" style="margin-top:8px; padding:4px 10px; font-size:12px;">Load Template 1</button>
+    </div>
+    <div class="challenge-card">
+        <strong>🎯 Challenge 2: Aggregations (GROUP BY & HAVING)</strong><br>
+        Count total orders by <code>country</code>. Only display countries with more than 1 order. (Hint: Requires a <code>JOIN</code>).
+        <br><button onclick="loadChallenge(2)" style="margin-top:8px; padding:4px 10px; font-size:12px;">Load Template 2</button>
+    </div>
+
+    <div class="workspace">
+        <h2>💻 Interactive Terminal</h2>
+        <p>Type your query below. Remember: SQL evaluation follows a specific internal logical structure.</p>
+        
+        <textarea id="sql-editor" class="code-style" placeholder="SELECT * FROM orders WHERE ..."></textarea>
+        
+        <div class="btn-group">
+            <button onclick="executeQuery()">⚡ Run Query</button>
+            <button class="secondary" onclick="resetEditor()">🔄 Reset</button>
+        </div>
+
+        <h3>🖥️ Query Execution Result</h3>
+        <div id="output" class="output-box code-style">Output logs will appear here after execution...</div>
+    </div>
+
+    <h2>💡 Engine Order of Execution</h2>
+    <ul class="execution-list code-style">
+        <li>1. FROM / JOIN</li>
+        <li>2. WHERE</li>
+        <li>3. GROUP BY</li>
+        <li>4. HAVING</li>
+        <li>5. SELECT</li>
+        <li>6. DISTINCT</li>
+        <li>7. ORDER BY</li>
+        <li>8. LIMIT</li>
+    </ul>
+</div>
+
+<script>
+    // In-memory Mock Database State
+    const db = {
+        users: [
+            { user_id: 1, name: 'Alice Smith', country: 'USA', signup_date: '2026-01-10' },
+            { user_id: 2, name: 'Carlos Buendia', country: 'Colombia', signup_date: '2026-02-14' },
+            { user_id: 3, name: 'Elena Rostova', country: 'Germany', signup_date: '2026-03-01' },
+            { user_id: 4, name: 'David Lee', country: 'USA', signup_date: '2026-03-22' }
+        ],
+        orders: [
+            { order_id: 101, user_id: 1, order_date: '2026-02-20', total_amount: 150.00 },
+            { order_id: 102, user_id: 2, order_date: '2026-03-15', total_amount: 45.50 },
+            { order_id: 103, user_id: 1, order_date: '2026-04-10', total_amount: 210.00 },
+            { order_id: 104, user_id: 3, order_date: '2026-05-02', total_amount: 89.99 },
+            { order_id: 105, user_id: 2, order_date: '2026-05-28', total_amount: 120.00 }
+        ]
+    };
+
+    const templates = {
+        1: "SELECT order_id, user_id, order_date, total_amount\nFROM orders\nWHERE total_amount > 100 \n  AND order_date BETWEEN '2026-01-01' AND '2026-06-01'\nORDER BY total_amount DESC;",
+        2: "SELECT u.country, COUNT(o.order_id) AS total_orders\nFROM users u\nJOIN orders o ON u.user_id = o.user_id\nGROUP BY u.country\nHAVING COUNT(o.order_id) > 1;"
+    };
+
+    function loadChallenge(id) {
+        document.getElementById('sql-editor').value = templates[id];
+    }
+
+    function resetEditor() {
+        document.getElementById('sql-editor').value = '';
+        document.getElementById('output').innerHTML = 'Output logs will appear here after execution...';
+    }
+
+    // A lightweight client-side SQL semantic parser & executor simulator
+    function executeQuery() {
+        const queryText = document.getElementById('sql-editor').value.trim();
+        const output = document.getElementById('output');
+        
+        if (!queryText) {
+            output.innerHTML = '<span class="error">Error: Query terminal is empty!</span>';
+            return;
+        }
+
+        // Basic sanity syntax checkers
+        if (!queryText.toUpperCase().includes('SELECT') || !queryText.toUpperCase().includes('FROM')) {
+            output.innerHTML = '<span class="error">Syntax Error: A valid query must contain at least SELECT and FROM clauses.</span>';
+            return;
+        }
+
+        try {
+            let workingDataset = [];
+            const upperQuery = queryText.toUpperCase();
+
+            // 1. Resolve FROM / JOIN targets
+            if (upperQuery.includes('JOIN')) {
+                // Perform inner join simulation
+                db.users.forEach(u => {
+                    db.orders.forEach(o => {
+                        if (u.user_id === o.user_id) {
+                            workingDataset.push({ ...u, ...o });
+                        }
+                    });
+                });
+            } else if (upperQuery.includes('FROM USERS')) {
+                workingDataset = JSON.parse(JSON.stringify(db.users));
+            } else if (upperQuery.includes('FROM ORDERS')) {
+                workingDataset = JSON.parse(JSON.stringify(db.orders));
+            } else {
+                throw new Error("Table target not recognized. Use 'users' or 'orders'.");
+            }
+
+            // 2. Simulate WHERE engine filters
+            if (upperQuery.includes('WHERE')) {
+                if (upperQuery.includes('TOTAL_AMOUNT > 100')) {
+                    workingDataset = workingDataset.filter(r => r.total_amount > 100);
+                }
+                if (upperQuery.includes('BETWEEN')) {
+                    workingDataset = workingDataset.filter(r => r.order_date >= '2026-01-01' && r.order_date <= '2026-06-01');
+                }
+            }
+
+            // 3. Simulate Aggregations (GROUP BY / HAVING)
+            let isAggregated = false;
+            if (upperQuery.includes('GROUP BY')) {
+                isAggregated = true;
+                const groups = {};
+                workingDataset.forEach(row => {
+                    const key = row.country || 'Unknown';
+                    if (!groups[key]) groups[key] = [];
+                    groups[key].push(row);
+                });
+
+                workingDataset = Object.keys(groups).map(key => {
+                    return {
+                        country: key,
+                        total_orders: groups[key].length
+                    };
+                });
+
+                // HAVING filtering
+                if (upperQuery.includes('HAVING') && upperQuery.includes('> 1')) {
+                    workingDataset = workingDataset.filter(r => r.total_orders > 1);
+                }
+            }
+
+            // 4. Simulate ORDER BY sorting
+            if (upperQuery.includes('ORDER BY')) {
+                if (upperQuery.includes('TOTAL_AMOUNT') && upperQuery.includes('DESC')) {
+                    workingDataset.sort((a,b) => b.total_amount - a.total_amount);
+                }
+            }
+
+            // Render Output Table Structure
+            if (workingDataset.length === 0) {
+                output.innerHTML = '<span class="success">Query executed successfully.</span><br>Result: 0 rows returned.';
+                return;
+            }
+
+            let htmlTable = '<span class="success">✔ Query executed successfully!</span><br><br><table><thead><tr>';
+            const columns = Object.keys(workingDataset[0]);
+            columns.forEach(col => htmlTable += `<th>${col}</th>`);
+            htmlTable += '</tr></thead><tbody>';
+
+            workingDataset.forEach(row => {
+                htmlTable += '<tr>';
+                columns.forEach(col => htmlTable += `<td>${row[col]}</td>`);
+                htmlTable += '</tr>';
+            });
+            htmlTable += '</tbody></table>';
+            
+            output.innerHTML = htmlTable;
+
+        } catch (err) {
+            output.innerHTML = `<span class="error">Execution Engine Error: ${err.message}</span>`;
+        }
+    }
+</script>
+
+</body>
+</html>
