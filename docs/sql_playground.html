@@ -4,259 +4,393 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>det • SQL Interactive Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-color: #f8f9fa;
-            --container-bg: #ffffff;
-            --text-color: #212529;
-            --primary: #1a73e8;
-            --primary-hover: #1557b0;
-            --border-color: #dee2e6;
-            --code-bg: #272822;
-            --code-text: #f8f8f2;
-            --success: #28a745;
-            --error: #dc3545;
-            --accent: #e67e22;
+            --bg: #fbfaf7;
+            --surface: #ffffff;
+            --text-main: #191919;
+            --text-muted: #666360;
+            --border: #e6e4e0;
+            --accent: #d97736;
+            --accent-light: #fcf6f2;
+            --code-bg: #1e1e1e;
+            --code-text: #f3f3f3;
+            --success: #2e7d32;
+            --success-bg: #edf7ed;
+            --error: #c62828;
+            --error-bg: #fdecea;
+            --font-sans: 'Instrument Sans', -apple-system, sans-serif;
+            --font-mono: 'Fira Code', monospace;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #121212;
-                --container-bg: #1e1e1e;
-                --text-color: #e0e0e0;
-                --border-color: #333333;
-                --primary: #8ab4f8;
-                --primary-hover: #aecbfa;
+                --bg: #121211;
+                --surface: #1a1a19;
+                --text-main: #e5e4e0;
+                --text-muted: #999690;
+                --border: #2d2d2a;
+                --accent: #e58a4b;
+                --accent-light: #241d18;
+                --code-bg: #0d0d0c;
+                --code-text: #e5e4e0;
+                --success: #81c784;
+                --success-bg: #142215;
+                --error: #e57373;
+                --error-bg: #2c1515;
             }
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: var(--font-sans);
+            background-color: var(--bg);
+            color: var(--text-main);
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 960px;
             margin: 0 auto;
-            background: var(--container-bg);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        header {
+            margin-bottom: 48px;
+        }
+
+        .brand {
+            font-family: var(--font-mono);
+            font-weight: 500;
+            color: var(--accent);
+            text-transform: lowercase;
+            margin-bottom: 8px;
+            font-size: 14px;
+            letter-spacing: -0.5px;
         }
 
         h1 {
-            color: var(--primary);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-            margin-top: 0;
+            font-size: 32px;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            margin: 0 0 12px 0;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 16px;
+            max-width: 640px;
+            margin: 0;
         }
 
         h2 {
-            color: var(--accent);
-            margin-top: 30px;
+            font-size: 20px;
+            font-weight: 500;
+            margin: 40px 0 20px 0;
+            letter-spacing: -0.3px;
         }
 
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 24px;
+            margin-bottom: 32px;
         }
 
         @media (max-width: 768px) {
             .grid { grid-template-columns: 1fr; }
         }
 
-        .schema-box {
-            background: var(--bg-color);
-            padding: 15px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .card h3 {
+            margin: 0 0 16px 0;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: var(--font-mono);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
             font-size: 14px;
         }
 
         th, td {
-            padding: 8px 12px;
+            padding: 10px 0;
             text-align: left;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border);
         }
 
         th {
-            background-color: rgba(0,0,0,0.03);
-            font-weight: 600;
-        }
-
-        .code-style {
-            font-family: 'Fira Code', Consolas, Monaco, monospace;
+            color: var(--text-muted);
+            font-weight: 500;
             font-size: 13px;
         }
 
-        .workspace {
-            margin-top: 30px;
-            border-top: 2px solid var(--border-color);
-            padding-top: 20px;
+        .mono {
+            font-family: var(--font-mono);
+            font-size: 13px;
+        }
+
+        .challenge-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s ease;
+        }
+
+        .challenge-box:hover {
+            border-color: var(--accent);
+        }
+
+        .challenge-meta {
+            font-size: 12px;
+            font-family: var(--font-mono);
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .challenge-title {
+            font-weight: 500;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .challenge-desc {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 16px;
         }
 
         textarea {
             width: 100%;
-            height: 140px;
+            height: 160px;
             background: var(--code-bg);
             color: var(--code-text);
-            padding: 15px;
-            border-radius: 6px;
-            border: none;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid transparent;
             box-sizing: border-box;
             resize: vertical;
+            outline: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
         }
 
         .btn-group {
-            margin-top: 10px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         button {
-            background-color: var(--primary);
-            color: white;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            font-weight: 500;
+            background-color: var(--text-main);
+            color: var(--surface);
             border: none;
             padding: 10px 20px;
-            font-weight: bold;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.15s ease;
         }
 
-        button:hover { background-color: var(--primary-hover); }
-        button.secondary { background-color: #6c757d; }
-        button.secondary:hover { background-color: #5a6268; }
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-0.5px);
+        }
 
-        .output-box {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 6px;
+        button.secondary {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        button.secondary:hover {
+            background-color: var(--surface);
+            color: var(--text-main);
+            border-color: var(--text-muted);
+        }
+
+        .output-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+            margin: 32px 0 12px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .output-wrapper {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
             min-height: 60px;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
             overflow-x: auto;
         }
 
-        .error { color: var(--error); font-weight: bold; }
-        .success { color: var(--success); font-weight: bold; }
-
-        .challenge-card {
-            background: rgba(26, 115, 232, 0.05);
-            border-left: 4px solid var(--primary);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 0 6px 6px 0;
+        .status-msg {
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            font-family: var(--font-mono);
         }
 
-        .execution-list {
+        .status-msg.error {
+            background-color: var(--error-bg);
+            color: var(--error);
+            border: 1px solid rgba(198, 40, 40, 0.15);
+        }
+
+        .status-msg.success {
+            background-color: var(--success-bg);
+            color: var(--success);
+            border: 1px solid rgba(46, 125, 50, 0.15);
+        }
+
+        .execution-flow {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            padding: 0;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 12px 0;
             list-style: none;
+            margin: 0;
+            border-bottom: 1px solid var(--border);
         }
 
-        .execution-list li {
-            background: var(--border-color);
-            padding: 5px 10px;
+        .execution-flow li {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
             border-radius: 4px;
-            font-size: 12px;
+            white-space: nowrap;
+            color: var(--text-muted);
+        }
+
+        .execution-flow li.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-light);
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📊 det • SQL Interactive Studio</h1>
-    <p>Practice writing and executing core SQL operators directly in your browser. This application evaluates your syntax queries in real-time against a mock transactional dataset.</p>
+    <header>
+        <div class="brand">det • data engineering toolkit</div>
+        <h1>SQL Studio Workspace</h1>
+        <p class="subtitle">An isolated client-side playground engineered to test, validate, and build intuition for declarative query execution flows.</p>
+    </header>
 
-    <h2>🗂️ Sandbox Database Schema</h2>
+    <h2>Database Schema Blueprint</h2>
     <div class="grid">
-        <div class="schema-box">
-            <h3>1. <code>users</code></h3>
+        <div class="card">
+            <h3>users</h3>
             <table>
                 <thead>
-                    <tr><th>Column</th><th>Type</th><th>Example</th></tr>
+                    <tr><th>Field</th><th>Type</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td class="code-style">user_id</td><td>INT</td><td>1, 2, 3</td></tr>
-                    <tr><td class="code-style">name</td><td>VARCHAR</td><td>'Alice', 'Carlos'</td></tr>
-                    <tr><td class="code-style">country</td><td>VARCHAR</td><td>'USA', 'Colombia'</td></tr>
-                    <tr><td class="code-style">signup_date</td><td>DATE</td><td>'2026-01-15'</td></tr>
+                    <tr><td class="mono">user_id</td><td class="mono" style="color:var(--accent)">INT</td></tr>
+                    <tr><td class="mono">name</td><td class="mono">VARCHAR</td></tr>
+                    <tr><td class="mono">country</td><td class="mono">VARCHAR</td></tr>
+                    <tr><td class="mono">signup_date</td><td class="mono">DATE</td></tr>
                 </tbody>
             </table>
         </div>
-        <div class="schema-box">
-            <h3>2. <code>orders</code></h3>
+        <div class="card">
+            <h3>orders</h3>
             <table>
                 <thead>
-                    <tr><th>Column</th><th>Type</th><th>Example</th></tr>
+                    <tr><th>Field</th><th>Type</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td class="code-style">order_id</td><td>INT</td><td>101, 102</td></tr>
-                    <tr><td class="code-style">user_id</td><td>INT</td><td>1, 3</td></tr>
-                    <tr><td class="code-style">order_date</td><td>DATE</td><td>'2026-03-04'</td></tr>
-                    <tr><td class="code-style">total_amount</td><td>DECIMAL</td><td>150.50, 45.00</td></tr>
+                    <tr><td class="mono">order_id</td><td class="mono" style="color:var(--accent)">INT</td></tr>
+                    <tr><td class="mono">user_id</td><td class="mono">INT</td></tr>
+                    <tr><td class="mono">order_date</td><td class="mono">DATE</td></tr>
+                    <tr><td class="mono">total_amount</td><td class="mono">DECIMAL</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <h2>⚔️ Guided Practice Challenges</h2>
-    <div class="challenge-card">
-        <strong>🎯 Challenge 1: Filtering & Sorting</strong><br>
-        Find all records from <code>orders</code> worth more than $100 placed between January 1, 2026, and June 1, 2026. Sort by <code>total_amount DESC</code>.
-        <br><button onclick="loadChallenge(1)" style="margin-top:8px; padding:4px 10px; font-size:12px;">Load Template 1</button>
-    </div>
-    <div class="challenge-card">
-        <strong>🎯 Challenge 2: Aggregations (GROUP BY & HAVING)</strong><br>
-        Count total orders by <code>country</code>. Only display countries with more than 1 order. (Hint: Requires a <code>JOIN</code>).
-        <br><button onclick="loadChallenge(2)" style="margin-top:8px; padding:4px 10px; font-size:12px;">Load Template 2</button>
-    </div>
-
-    <div class="workspace">
-        <h2>💻 Interactive Terminal</h2>
-        <p>Type your query below. Remember: SQL evaluation follows a specific internal logical structure.</p>
-        
-        <textarea id="sql-editor" class="code-style" placeholder="SELECT * FROM orders WHERE ..."></textarea>
-        
-        <div class="btn-group">
-            <button onclick="executeQuery()">⚡ Run Query</button>
-            <button class="secondary" onclick="resetEditor()">🔄 Reset</button>
+    <h2>Interactive Directives</h2>
+    <div class="grid">
+        <div class="challenge-box">
+            <div class="challenge-meta">Challenge 01</div>
+            <div class="challenge-title">Conditional Ingestion Slicing</div>
+            <div class="challenge-desc">Extract all orders valued above $100 executed during the first half of 2026. Prioritize higher tickets first.</div>
+            <button onclick="loadTemplate(1)">Initialize Workspace</button>
         </div>
-
-        <h3>🖥️ Query Execution Result</h3>
-        <div id="output" class="output-box code-style">Output logs will appear here after execution...</div>
+        <div class="challenge-box">
+            <div class="challenge-meta">Challenge 02</div>
+            <div class="challenge-title">Relational Aggregations</div>
+            <div class="challenge-desc">Evaluate the overall distribution volume across transactional locales. Exclude sparse footprints with less than two units.</div>
+            <button onclick="loadTemplate(2)">Initialize Workspace</button>
+        </div>
     </div>
 
-    <h2>💡 Engine Order of Execution</h2>
-    <ul class="execution-list code-style">
-        <li>1. FROM / JOIN</li>
+    <h2>Query Editor</h2>
+    <ul class="execution-flow">
+        <li>1. FROM</li>
         <li>2. WHERE</li>
         <li>3. GROUP BY</li>
         <li>4. HAVING</li>
         <li>5. SELECT</li>
-        <li>6. DISTINCT</li>
-        <li>7. ORDER BY</li>
-        <li>8. LIMIT</li>
+        <li>6. ORDER BY</li>
     </ul>
+
+    <div style="margin-top: 20px;">
+        <textarea id="editor" placeholder="-- Write SQL code execution paths here...&#10;SELECT * FROM orders;"></textarea>
+        
+        <div class="action-bar">
+            <div class="btn-group">
+                <button onclick="runPipeline()">Execute Code</button>
+                <button class="secondary" onclick="clearWorkspace()">Clear</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="output-title">Runtime Output Buffer</div>
+    <div id="output-buffer" class="output-wrapper">
+        <span style="color: var(--text-muted); font-size: 14px;">Terminal standby. Awaiting query dispatch execution metrics...</span>
+    </div>
 </div>
 
 <script>
-    // In-memory Mock Database State
-    const db = {
+    const mockDb = {
         users: [
             { user_id: 1, name: 'Alice Smith', country: 'USA', signup_date: '2026-01-10' },
             { user_id: 2, name: 'Carlos Buendia', country: 'Colombia', signup_date: '2026-02-14' },
@@ -272,121 +406,106 @@
         ]
     };
 
-    const templates = {
+    const codeTemplates = {
         1: "SELECT order_id, user_id, order_date, total_amount\nFROM orders\nWHERE total_amount > 100 \n  AND order_date BETWEEN '2026-01-01' AND '2026-06-01'\nORDER BY total_amount DESC;",
         2: "SELECT u.country, COUNT(o.order_id) AS total_orders\nFROM users u\nJOIN orders o ON u.user_id = o.user_id\nGROUP BY u.country\nHAVING COUNT(o.order_id) > 1;"
     };
 
-    function loadChallenge(id) {
-        document.getElementById('sql-editor').value = templates[id];
+    function loadTemplate(id) {
+        document.getElementById('editor').value = codeTemplates[id];
     }
 
-    function resetEditor() {
-        document.getElementById('sql-editor').value = '';
-        document.getElementById('output').innerHTML = 'Output logs will appear here after execution...';
+    function clearWorkspace() {
+        document.getElementById('editor').value = '';
+        document.getElementById('output-buffer').innerHTML = '<span style="color: var(--text-muted); font-size: 14px;">Terminal standby. Awaiting query dispatch execution metrics...</span>';
     }
 
-    // A lightweight client-side SQL semantic parser & executor simulator
-    function executeQuery() {
-        const queryText = document.getElementById('sql-editor').value.trim();
-        const output = document.getElementById('output');
+    function runPipeline() {
+        const rawSql = document.getElementById('editor').value.trim();
+        const buffer = document.getElementById('output-buffer');
         
-        if (!queryText) {
-            output.innerHTML = '<span class="error">Error: Query terminal is empty!</span>';
+        if (!rawSql) {
+            buffer.innerHTML = '<div class="status-msg error">Pipeline Fault: Command input is empty.</div>';
             return;
         }
 
-        // Basic sanity syntax checkers
-        if (!queryText.toUpperCase().includes('SELECT') || !queryText.toUpperCase().includes('FROM')) {
-            output.innerHTML = '<span class="error">Syntax Error: A valid query must contain at least SELECT and FROM clauses.</span>';
+        const normalized = rawSql.toUpperCase();
+        if (!normalized.includes('SELECT') || !normalized.includes('FROM')) {
+            buffer.innerHTML = '<div class="status-msg error">Compilation Failure: Standard SQL commands require explicitly declared SELECT and FROM boundaries.</div>';
             return;
         }
 
         try {
-            let workingDataset = [];
-            const upperQuery = queryText.toUpperCase();
+            let stream = [];
 
-            // 1. Resolve FROM / JOIN targets
-            if (upperQuery.includes('JOIN')) {
-                // Perform inner join simulation
-                db.users.forEach(u => {
-                    db.orders.forEach(o => {
-                        if (u.user_id === o.user_id) {
-                            workingDataset.push({ ...u, ...o });
-                        }
+            if (normalized.includes('JOIN')) {
+                mockDb.users.forEach(u => {
+                    mockDb.orders.forEach(o => {
+                        if (u.user_id === o.user_id) stream.push({ ...u, ...o });
                     });
                 });
-            } else if (upperQuery.includes('FROM USERS')) {
-                workingDataset = JSON.parse(JSON.stringify(db.users));
-            } else if (upperQuery.includes('FROM ORDERS')) {
-                workingDataset = JSON.parse(JSON.stringify(db.orders));
+            } else if (normalized.includes('FROM USERS')) {
+                stream = JSON.parse(JSON.stringify(mockDb.users));
+            } else if (normalized.includes('FROM ORDERS')) {
+                stream = JSON.parse(JSON.stringify(mockDb.orders));
             } else {
-                throw new Error("Table target not recognized. Use 'users' or 'orders'.");
+                throw new Error("Invalid Object Model Context. Target catalog namespaces must resolve to 'users' or 'orders'.");
             }
 
-            // 2. Simulate WHERE engine filters
-            if (upperQuery.includes('WHERE')) {
-                if (upperQuery.includes('TOTAL_AMOUNT > 100')) {
-                    workingDataset = workingDataset.filter(r => r.total_amount > 100);
+            if (normalized.includes('WHERE')) {
+                if (normalized.includes('TOTAL_AMOUNT > 100')) {
+                    stream = stream.filter(r => r.total_amount > 100);
                 }
-                if (upperQuery.includes('BETWEEN')) {
-                    workingDataset = workingDataset.filter(r => r.order_date >= '2026-01-01' && r.order_date <= '2026-06-01');
+                if (normalized.includes('BETWEEN')) {
+                    stream = stream.filter(r => r.order_date >= '2026-01-01' && r.order_date <= '2026-06-01');
                 }
             }
 
-            // 3. Simulate Aggregations (GROUP BY / HAVING)
-            let isAggregated = false;
-            if (upperQuery.includes('GROUP BY')) {
-                isAggregated = true;
+            if (normalized.includes('GROUP BY')) {
                 const groups = {};
-                workingDataset.forEach(row => {
-                    const key = row.country || 'Unknown';
-                    if (!groups[key]) groups[key] = [];
-                    groups[key].push(row);
+                stream.forEach(item => {
+                    const trackingKey = item.country || 'Undefined';
+                    if (!groups[trackingKey]) groups[trackingKey] = [];
+                    groups[trackingKey].push(item);
                 });
 
-                workingDataset = Object.keys(groups).map(key => {
-                    return {
-                        country: key,
-                        total_orders: groups[key].length
-                    };
-                });
+                stream = Object.keys(groups).map(k => ({
+                    country: k,
+                    total_orders: groups[k].length
+                }));
 
-                // HAVING filtering
-                if (upperQuery.includes('HAVING') && upperQuery.includes('> 1')) {
-                    workingDataset = workingDataset.filter(r => r.total_orders > 1);
+                if (normalized.includes('HAVING') && normalized.includes('> 1')) {
+                    stream = stream.filter(r => r.total_orders > 1);
                 }
             }
 
-            // 4. Simulate ORDER BY sorting
-            if (upperQuery.includes('ORDER BY')) {
-                if (upperQuery.includes('TOTAL_AMOUNT') && upperQuery.includes('DESC')) {
-                    workingDataset.sort((a,b) => b.total_amount - a.total_amount);
+            if (normalized.includes('ORDER BY')) {
+                if (normalized.includes('TOTAL_AMOUNT') && normalized.includes('DESC')) {
+                    stream.sort((x, y) => y.total_amount - x.total_amount);
                 }
             }
 
-            // Render Output Table Structure
-            if (workingDataset.length === 0) {
-                output.innerHTML = '<span class="success">Query executed successfully.</span><br>Result: 0 rows returned.';
+            if (stream.length === 0) {
+                buffer.innerHTML = '<div class="status-msg success">Success: Pipeline cleared. Empty set emitted (0 records returned).</div>';
                 return;
             }
 
-            let htmlTable = '<span class="success">✔ Query executed successfully!</span><br><br><table><thead><tr>';
-            const columns = Object.keys(workingDataset[0]);
-            columns.forEach(col => htmlTable += `<th>${col}</th>`);
-            htmlTable += '</tr></thead><tbody>';
+            let viewHtml = '<div class="status-msg success">✔ Logged execution run context: Pipeline executed successfully.</div><table><thead><tr>';
+            const headers = Object.keys(stream[0]);
+            headers.forEach(h => viewHtml += `<th>${h}</th>`);
+            viewHtml += '</tr></thead><tbody>';
 
-            workingDataset.forEach(row => {
-                htmlTable += '<tr>';
-                columns.forEach(col => htmlTable += `<td>${row[col]}</td>`);
-                htmlTable += '</tr>';
+            stream.forEach(row => {
+                viewHtml += '<tr>';
+                headers.forEach(h => viewHtml += `<td class="mono">${row[h]}</td>`);
+                viewHtml += '</tr>';
             });
-            htmlTable += '</tbody></table>';
+            viewHtml += '</tbody></table>';
             
-            output.innerHTML = htmlTable;
+            buffer.innerHTML = viewHtml;
 
-        } catch (err) {
-            output.innerHTML = `<span class="error">Execution Engine Error: ${err.message}</span>`;
+        } catch (exception) {
+            buffer.innerHTML = `<div class="status-msg error">Runtime Exception Caught: ${exception.message}</div>`;
         }
     }
 </script>
