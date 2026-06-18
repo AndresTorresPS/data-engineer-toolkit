@@ -1,55 +1,55 @@
 [LOS CIBERATAQUES]
   │
-  ├──► 1. FAMILIA: INGENIERÍA SOCIAL (Factor Humano)
-  │     ├── Subfamilia: Phishing (Engaño por canales de comunicación)
+  ├──► INGENIERÍA SOCIAL (Factor Humano)
+  │     ├── Phishing (Engaño por canales de comunicación)
   │     │     ├── Spear Phishing (Dirigido a objetivos específicos)
   │     │     ├── Whaling (Dirigido a altos ejecutivos)
   │     │     └── Smishing / Vishing (A través de SMS o llamadas de voz con IA)
   │     │
-  │     └── Subfamilia: Manipulación Psicológica
+  │     └── Manipulación Psicológica
   │           ├── Baiting (Uso de ganchos como descargas gratuitas o USBs infectados)
   │           └── Pretexting (Creación de un escenario falso para obtener datos)
   │
-  ├──► 2. FAMILIA: MALWARE (Software Malicioso)
-  │     ├── Subfamilia: Código Encriptador y Extorsivo
+  ├──► MALWARE (Software Malicioso)
+  │     ├── Código Encriptador y Extorsivo
   │     │     └── Ransomware (Cifrado de datos y doble extorsión con filtración)
   │     │
-  │     ├── Subfamilia: Exfiltración silenciosa e Infección
+  │     ├── Exfiltración silenciosa e Infección
   │     │     ├── Infostealers (Robo de credenciales y cookies de sesión de navegadores)
   │     │     ├── Troyanos (Software legítimo aparente que oculta código dañino)
   │     │     └── Spyware / Keyloggers (Monitoreo y registro de pulsaciones de teclado)
   │     │
-  │     └── Subfamilia: Automatización y Control
+  │     └── Automatización y Control
   │           ├── Gusanos (Malware con capacidad de autoreplicación en red)
   │           └── Botnets (Redes de dispositivos zombis controlados remotamente)
   │
-  ├──► 3. FAMILIA: ATAQUES BASADOS EN IDENTIDAD Y CREDENCIALES (Sin Malware)
-  │     ├── Subfamilia: Descubrimiento de Contraseñas
+  ├──► BASADOS EN IDENTIDAD Y CREDENCIALES (Sin Malware)
+  │     ├── Descubrimiento de Contraseñas
   │     │     ├── Fuerza Bruta / Credential Stuffing (Uso automatizado de contraseñas filtradas)
   │     │     └── Ataques de Diccionario (Probar combinaciones de palabras comunes)
   │     │
-  │     └── Subfamilia: Evasión de Autenticación
+  │     └── Evasión de Autenticación
   │           ├── MFA Fatigue (Saturación de notificaciones push para que la víctima acepte)
   │           └── Secuestro de Sesión / Cookies (Saltarse el login usando un token activo)
   │
-  ├──► 4. FAMILIA: ATAQUES A LA INFRAESTRUCTURA Y RED
-  │     ├── Subfamilia: Interrupción de Servicios
+  ├──► ATAQUES A LA INFRAESTRUCTURA Y RED
+  │     ├── Interrupción de Servicios
   │     │     └── DoS / DDoS (Denegación de Servicio Distribuida por saturación de tráfico)
   │     │
-  │     ├── Subfamilia: Intercepción de Comunicaciones
+  │     ├── Intercepción de Comunicaciones
   │     │     └── MitM - Man in the Middle (Interponerse entre la víctima y el servidor, ej: Wi-Fi falsas)
   │     │
-  │     └── Subfamilia: Ataques a la Capa de Aplicación y Web
+  │     └── Ataques a la Capa de Aplicación y Web
   │           ├── Inyección SQL (Introducción de código malicioso en bases de datos)
   │           └── XSS - Cross-Site Scripting (Inyección de scripts en páginas web legítimas)
   │
-  └──► 5. FAMILIA: ATAQUES AVANZADOS Y EMERGENTES
-        ├── Subfamilia: Ataques a la Cadena de Suministro (Supply Chain)
+  └──► ATAQUES AVANZADOS Y EMERGENTES
+        ├── Ataques a la Cadena de Suministro (Supply Chain)
         │     └── Vulneración de proveedores de software legítimos (ej. envenenamiento de actualizaciones)
         │
-        ├── Subfamilia: Explotación de Vulnerabilidades
+        ├── Explotación de Vulnerabilidades
         │     └── Zero-Day (Ataques contra fallos de software que el fabricante aún no conoce)
         │
-        └── Subfamilia: Ataques contra Inteligencia Artificial
+        └── Ataques contra Inteligencia Artificial
               ├── Envenenamiento de Datos (Manipular los datos de entrenamiento de una IA)
               └── Prompt Injection (Manipulación de instrucciones para evadir las reglas del sistema)
