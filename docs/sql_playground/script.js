@@ -7,7 +7,7 @@ function updateThemeIcon(theme) {
 }
 
 function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
     document.documentElement.setAttribute('data-theme', newTheme);
@@ -215,3 +215,5 @@ window.loadTemplate = loadTemplate;
 window.clearWorkspace = clearWorkspace;
 window.runPipeline = runPipeline;
 window.toggleTheme = toggleTheme;
+window.downloadTableCsv = downloadTableCsv;
+window.renderTablePreview = renderTablePreview;
