@@ -34,6 +34,76 @@ function loadTemplate(id) {
 function clearWorkspace() {
     document.getElementById('editor').value = '';
     document.getElementById('output-buffer').innerHTML = '<span style="color: var(--text-muted); font-size: 14px;">Terminal standby. Awaiting query dispatch execution metrics...</span>';
+    const explorerPreview = document.getElementById('explorer-preview');
+    if (explorerPreview) {
+        explorerPreview.innerHTML = '<span style="color: var(--text-muted); font-size: 14px;">Select a table to inspect sample rows and column metadata.</span>';
+    }
+}
+
+function renderTablePreview(tableName) {
+    const preview = document.getElementById('explorer-preview');
+    if (!preview) return;
+
+    const tableData = mockDb[tableName];
+    if (!Array.isArray(tableData)) {
+        preview.innerHTML = '<div class="status-msg error">Preview Error: Table not found in mock database.</div>';
+        return;
+    }
+
+    if (tableData.length === 0) {
+        preview.innerHTML = '<div class="status-msg success">Empty Table: There are no rows available to preview.</div>';
+        return;
+    }
+
+    const sampleRows = tableData.slice(0, 5);
+    const columns = Object.keys(sampleRows[0]);
+    let html = '<div class="status-msg success">Showing up to 5 rows from <strong>' + tableName + '</strong>. Total rows: ' + tableData.length + '.</div>';
+    html += '<table class="preview-table"><thead><tr>';
+    columns.forEach(col => { html += '<th>' + col + '</th>'; });
+    html += '</tr></thead><tbody>';
+
+    sampleRows.forEach(row => {
+        html += '<tr>';
+        columns.forEach(col => { html += '<td class="mono">' + row[col] + '</td>'; });
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+
+    preview.innerHTML = html;
+}
+
+function downloadTableCsv() {
+    const tableName = document.getElementById('table-select').value;
+    const tableData = mockDb[tableName];
+    if (!Array.isArray(tableData) || tableData.length === 0) {
+        const preview = document.getElementById('explorer-preview');
+        if (preview) {
+            preview.innerHTML = '<div class="status-msg error">Export Error: There is no data to export for ' + tableName + '.</div>';
+        }
+        return;
+    }
+
+    const columns = Object.keys(tableData[0]);
+    const csvLines = [columns.join(',')];
+    tableData.forEach(row => {
+        const line = columns.map(col => {
+            const value = row[col] ?? '';
+            const escaped = String(value).replace(/"/g, '""');
+            return '"' + escaped + '"';
+        }).join(',');
+        csvLines.push(line);
+    });
+
+    const csv = csvLines.join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = tableName + '_preview.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
 }
 
 // Execute a simplified client-side SQL pipeline against mockDb

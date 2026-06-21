@@ -76,6 +76,32 @@
         </div>
     </div>
 
+    <h2>Data Explorer</h2>
+    <div class="grid">
+        <div class="card explorer-card">
+            <div class="explorer-header">
+                <div>
+                    <div class="explorer-label">Table preview</div>
+                    <div class="explorer-summary">Inspect mock data and schema without writing SQL.</div>
+                </div>
+                <button class="secondary" onclick="downloadTableCsv()">Export CSV</button>
+            </div>
+
+            <div class="explorer-controls">
+                <label for="table-select">Choose table</label>
+                <select id="table-select" onchange="renderTablePreview(this.value)">
+                    <option value="users">users</option>
+                    <option value="orders">orders</option>
+                </select>
+                <button onclick="renderTablePreview(document.getElementById('table-select').value)">Show preview</button>
+            </div>
+
+            <div id="explorer-preview" class="output-wrapper">
+                <span style="color: var(--text-muted); font-size: 14px;">Select a table to inspect sample rows and column metadata.</span>
+            </div>
+        </div>
+    </div>
+
     <h2>Query Editor</h2>
     <ul class="execution-flow">
         <li>1. FROM</li>
