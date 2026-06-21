@@ -94,6 +94,8 @@ th { color: var(--text-muted); font-weight: 500; font-size: 13px; }
 .challenge-meta { font-size: 12px; font-family: var(--font-mono); color: var(--accent); text-transform: uppercase; margin-bottom: 6px; }
 .challenge-title { font-weight: 500; font-size: 15px; margin-bottom: 8px; }
 .challenge-desc { color: var(--text-muted); font-size: 14px; margin-bottom: 16px; }
+.challenge-box button { background-color: var(--accent); color: var(--surface); font-weight: 600; margin-top: 8px; }
+.challenge-box button:hover { opacity: 0.85; }
 
 .explorer-card { padding: 24px; }
 .explorer-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
@@ -102,6 +104,8 @@ th { color: var(--text-muted); font-weight: 500; font-size: 13px; }
 .explorer-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 20px; }
 .explorer-controls label { color: var(--text-muted); font-size: 13px; font-family: var(--font-mono); }
 .explorer-controls select { min-width: 180px; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text-main); font-family: var(--font-mono); font-size: 14px; }
+.explorer-controls button { background-color: var(--accent); color: var(--surface); font-weight: 600; padding: 10px 24px; }
+.explorer-controls button:hover { opacity: 0.85; }
 .preview-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .preview-table th, .preview-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
 .preview-table th { color: var(--text-muted); text-align: left; font-size: 13px; }
