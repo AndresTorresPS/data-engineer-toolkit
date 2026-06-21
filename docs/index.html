@@ -13,17 +13,25 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none';">
     <title>SQL Playground</title>
+    
+    <script>
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-    <!-- External stylesheet for SQL Playground (extracted and optimized) -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
     <header>
-        <div class="brand">det • data engineering toolkit</div>
+        <div class="header-top">
+            <div class="brand">det • data engineering toolkit</div>
+            <button id="theme-toggle" class="icon-btn" onclick="toggleTheme()" aria-label="Toggle Theme"></button>
+        </div>
         <h1>SQL Playground</h1>
         <p class="subtitle">An isolated client-side playground engineered to test, validate, and build intuition for declarative query execution flows.</p>
     </header>
@@ -60,22 +68,6 @@
         </div>
     </div>
 
-    <h2>Interactive Directives</h2>
-    <div class="grid">
-        <div class="challenge-box">
-            <div class="challenge-meta">Challenge 01</div>
-            <div class="challenge-title">Conditional Ingestion Slicing</div>
-            <div class="challenge-desc">Extract all orders valued above $100 executed during the first half of 2026. Prioritize higher tickets first.</div>
-            <button onclick="loadTemplate(1)">Initialize Workspace</button>
-        </div>
-        <div class="challenge-box">
-            <div class="challenge-meta">Challenge 02</div>
-            <div class="challenge-title">Relational Aggregations</div>
-            <div class="challenge-desc">Evaluate the overall distribution volume across transactional locales. Exclude sparse footprints with less than two units.</div>
-            <button onclick="loadTemplate(2)">Initialize Workspace</button>
-        </div>
-    </div>
-
     <h2>Data Explorer</h2>
     <div class="grid">
         <div class="card explorer-card">
@@ -99,6 +91,22 @@
             <div id="explorer-preview" class="output-wrapper">
                 <span style="color: var(--text-muted); font-size: 14px;">Select a table to inspect sample rows and column metadata.</span>
             </div>
+        </div>
+    </div>
+
+    <h2>Interactive Directives</h2>
+    <div class="grid">
+        <div class="challenge-box">
+            <div class="challenge-meta">Challenge 01</div>
+            <div class="challenge-title">Conditional Ingestion Slicing</div>
+            <div class="challenge-desc">Extract all orders valued above $100 executed during the first half of 2026. Prioritize higher tickets first.</div>
+            <button onclick="loadTemplate(1)">Initialize Workspace</button>
+        </div>
+        <div class="challenge-box">
+            <div class="challenge-meta">Challenge 02</div>
+            <div class="challenge-title">Relational Aggregations</div>
+            <div class="challenge-desc">Evaluate the overall distribution volume across transactional locales. Exclude sparse footprints with less than two units.</div>
+            <button onclick="loadTemplate(2)">Initialize Workspace</button>
         </div>
     </div>
 
@@ -128,8 +136,7 @@
         <span style="color: var(--text-muted); font-size: 14px;">Terminal standby. Awaiting query dispatch execution metrics...</span>
     </div>
 </div>
-<!-- External script: behavior and pipeline execution logic (commented in English) -->
-<script src="script.js"></script>
 
+<script src="script.js"></script>
 </body>
 </html>
