@@ -164,9 +164,13 @@
     <div class="card">
         <div class="challenge-title">Answer Notebook</div>
         <p class="challenge-desc">Use this space to write notes, sketch architecture decisions, or draft SQL and Python pseudocode.</p>
-        <textarea placeholder="Write your answer notes here...\n\n1. ...\n2. ...\n3. ..."></textarea>
+        <textarea id="exam-notes" placeholder="Write your answer notes here...\n\n1. ...\n2. ...\n3. ..."></textarea>
+        
         <div class="action-bar" style="margin-top: 12px;">
-            <button onclick="clearNotes()">Clear Notes</button>
+            <div class="btn-group">
+                <button onclick="downloadNotes()">Download Notes</button>
+                <button class="secondary" onclick="clearNotes()">Clear Notes</button>
+            </div>
             <button class="secondary" onclick="toggleTheme()">Toggle Theme</button>
         </div>
     </div>
