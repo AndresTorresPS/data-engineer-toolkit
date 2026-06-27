@@ -38,9 +38,14 @@ body {
     color: var(--text-main);
     line-height: 1.6;
     margin: 0;
-    padding: 40px 20px;
+    padding: 0;
     -webkit-font-smoothing: antialiased;
     transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
 }
 
 .container { max-width: 960px; margin: 0 auto; }
@@ -145,3 +150,87 @@ button.secondary:hover { background-color: var(--surface); color: var(--text-mai
 .execution-flow { display: flex; gap: 8px; overflow-x: auto; padding: 12px 0; list-style: none; margin: 0; border-bottom: 1px solid var(--border); }
 .execution-flow li { font-family: var(--font-mono); font-size: 11px; background: var(--surface); border: 1px solid var(--border); padding: 4px 10px; border-radius: 4px; white-space: nowrap; color: var(--text-muted); transition: background-color 0.3s ease; }
 .execution-flow li.active { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+
+
+/* Sidebar Estilo Dashboard */
+.sidebar {
+    width: 280px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+/* Menú de Navegación */
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 40px;
+}
+
+.nav-btn {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid transparent;
+    text-align: left;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+    background: var(--accent-light);
+    color: var(--accent);
+    transform: translateX(4px); /* Pequeño efecto interactivo */
+}
+
+.nav-btn.active {
+    background: var(--text-main);
+    color: var(--surface);
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Contenido Principal */
+.main-content {
+    flex: 1;
+    padding: 40px 60px;
+    max-width: 1000px; /* Evita que el texto sea demasiado ancho */
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* Sistema de Pestañas y Animaciones */
+.tab-content {
+    display: none;
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tab-content.active-tab {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsividad para móviles */
+@media (max-width: 850px) {
+    .app-layout { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border); padding: 20px; }
+    .nav-menu { flex-direction: row; flex-wrap: wrap; margin-top: 20px; }
+    .nav-btn { flex: 1 1 120px; text-align: center; }
+    .main-content { padding: 24px 20px; }
+}

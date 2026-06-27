@@ -55,6 +55,32 @@ function downloadNotes() {
     document.body.removeChild(a);
 }
 
+// FEATURE: Sistema de Navegación por Pestañas (SPA behavior)
+function openTab(evt, tabId) {
+    // 1. Ocultar todo el contenido
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(tab => {
+        tab.classList.remove('active-tab');
+    });
+
+    // 2. Quitar el estado 'active' de todos los botones del menú
+    const navBtns = document.querySelectorAll('.nav-btn');
+    navBtns.forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // 3. Mostrar el contenido seleccionado y activar el botón
+    document.getElementById(tabId).classList.add('active-tab');
+    evt.currentTarget.classList.add('active');
+    
+    // Opcional: Hacer scroll hacia arriba en móviles al cambiar de pestaña
+    if (window.innerWidth <= 850) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+// Hacer la función global si usas módulos (no es estrictamente necesario en vanilla, pero buena práctica)
 window.toggleTheme = toggleTheme;
 window.clearNotes = clearNotes;
 window.downloadNotes = downloadNotes;
+window.openTab = openTab;

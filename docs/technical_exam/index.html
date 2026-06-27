@@ -19,163 +19,86 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    <header>
+<div class="app-layout">
+    <aside class="sidebar">
         <div class="header-top">
-            <div class="brand">det • data engineering toolkit</div>
+            <div class="brand">det • toolkit</div>
             <button id="theme-toggle" class="icon-btn" onclick="toggleTheme()" aria-label="Toggle Theme"></button>
         </div>
-        <h1>Data Engineering Technical Exam</h1>
-        <p class="subtitle">A long-form assessment designed to validate architecture, cloud services, orchestration, SQL, Python, and fundamental data engineering skills.</p>
-    </header>
-
-    <div class="card">
-        <h2>Exam Instructions</h2>
-        <p>This assessment is structured as a multi-part exam. Answer each question clearly and concisely. Use diagrams, bullet points, or examples where appropriate.</p>
-        <ul>
-            <li>Section 1 focuses on infrastructure, cloud and platform design.</li>
-            <li>Section 2 covers ETL, orchestration, and core data tooling.</li>
-            <li>Section 3 tests SQL, data modeling, and query logic.</li>
-            <li>Section 4 evaluates Python engineering and data pipeline implementation.</li>
-            <li>Section 5 probes operational concepts, security, monitoring, and cost optimization.</li>
-        </ul>
-    </div>
-
-    <h2>Exam Blueprint</h2>
-    <div class="grid">
-        <div class="card">
-            <h3>Cloud Infrastructure</h3>
-            <p>AWS, Azure, GCP, networking, storage, and compute choices.</p>
-        </div>
-        <div class="card">
-            <h3>Data Platforms</h3>
-            <p>Apache Spark, Airflow, Alteryx, dbt, Kafka, and modern ETL orchestration.</p>
-        </div>
-        <div class="card">
-            <h3>Analytics & Fundamentals</h3>
-            <p>SQL, normalization, data modeling, reliability, monitoring, and governance.</p>
-        </div>
-    </div>
-
-    <h2>Core Question Set</h2>
-    <div class="grid">
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 1</div>
-            <div class="challenge-title">Cloud Architecture Design</div>
-            <div class="challenge-desc">Describe a resilient multi-region data ingestion architecture for a global e-commerce application. Include AWS, Azure, or GCP components and explain how you would minimize latency, ensure data durability, and control cost.</div>
-        </div>
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 1</div>
-            <div class="challenge-title">Storage & Compute Trade-offs</div>
-            <div class="challenge-desc">Compare AWS S3, Azure Data Lake Storage, and GCS for analytics workloads. When would you choose object storage over block storage and how do you ensure efficient columnar query performance?</div>
-        </div>
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 1</div>
-            <div class="challenge-title">Cloud Networking</div>
-            <div class="challenge-desc">Explain VPC/subnet design for a secure data platform. Include private endpoints, firewall rules, and how to safely expose APIs and ingestion endpoints.</div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 2</div>
-            <div class="challenge-title">Apache Spark Pipeline</div>
-            <div class="challenge-desc">Design a Spark pipeline that reads raw JSON events, performs schema evolution handling, deduplicates records, and writes partitioned Parquet output.</div>
-        </div>
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 2</div>
-            <div class="challenge-title">Airflow Orchestration</div>
-            <div class="challenge-desc">Describe how to build a robust Airflow DAG with retries, SLA monitoring, and backfills for a nightly batch pipeline. Explain how you would parameterize the DAG and enforce task dependencies.</div>
-        </div>
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 2</div>
-            <div class="challenge-title">Alteryx and No-Code ETL</div>
-            <div class="challenge-desc">Outline the strengths and limitations of Alteryx when used for enterprise data workflows. When is it a good fit, and when should you prefer code-first orchestration?</div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 3</div>
-            <div class="challenge-title">SQL Query Logic</div>
-            <div class="challenge-desc">Write SQL that finds the top 3 customers by revenue for the last 90 days, excluding refunds and returning the customer segment and average order frequency.</div>
-        </div>
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 3</div>
-            <div class="challenge-title">Data Modeling</div>
-            <div class="challenge-desc">Compare star schema and normalized relational models. Give examples of when each model is preferable in a reporting pipeline and how you would implement slowly changing dimensions.</div>
-        </div>
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 3</div>
-            <div class="challenge-title">SQL Performance</div>
-            <div class="challenge-desc">Explain partition pruning, indexing strategy, and cost-based optimization for a data warehouse query. How do you detect and fix a query that performs full scans on a very large fact table?</div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 4</div>
-            <div class="challenge-title">Python Data Engineering</div>
-            <div class="challenge-desc">Describe how you would implement a Python data ingestion job using pandas, PySpark, or dbt. Include error handling, retries, and how to manage schema validation.</div>
-        </div>
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 4</div>
-            <div class="challenge-title">API & Streaming</div>
-            <div class="challenge-desc">Design a Python microservice that ingests streaming data from Kafka and writes normalized records to a data lake. Explain consumer groups, offsets, and exactly-once semantics.</div>
-        </div>
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 4</div>
-            <div class="challenge-title">Testing & Quality</div>
-            <div class="challenge-desc">What automated validation checks would you apply to data pipelines? Include schema checks, row counts, null thresholds, and integration tests for Python processing code.</div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 5</div>
-            <div class="challenge-title">Security & Governance</div>
-            <div class="challenge-desc">Explain role-based access control, encryption-at-rest, encryption-in-transit, and audit logging for a cloud data platform. How do you enforce least privilege across AWS, Azure, and GCP?</div>
-        </div>
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 5</div>
-            <div class="challenge-title">Monitoring & Observability</div>
-            <div class="challenge-desc">Describe monitoring metrics and alert rules for a data pipeline. Include SLA tracking, pipeline health dashboards, and how to troubleshoot downstream data quality incidents.</div>
-        </div>
-        <div class="challenge-box">
-            <div class="challenge-meta">Section 5</div>
-            <div class="challenge-title">Cost Optimization</div>
-            <div class="challenge-desc">What strategies would you use to control costs in cloud analytics workloads? Cover storage lifecycle, compute scaling, reserved instances, and query cost management.</div>
-        </div>
-    </div>
-
-    <h2>Bonus Deep-Dive Questions</h2>
-    <div class="grid">
-        <div class="card">
-            <h3>Data Mesh & Hybrid Architecture</h3>
-            <p>Explain the principles of data mesh and how you would apply them across teams, domains, and shared infrastructure in a large enterprise.</p>
-        </div>
-        <div class="card">
-            <h3>Metadata & Catalog</h3>
-            <p>Describe the role of a metadata catalog, lineage tracking, and business glossary in a governed data platform. What tools or services would you choose?</p>
-        </div>
-    </div>
-
-    <h2>Exam Workspace</h2>
-    <div class="card">
-        <div class="challenge-title">Answer Notebook</div>
-        <p class="challenge-desc">Use this space to write notes, sketch architecture decisions, or draft SQL and Python pseudocode.</p>
-        <textarea id="exam-notes" placeholder="Write your answer notes here...\n\n1. ...\n2. ...\n3. ..."></textarea>
         
-        <div class="action-bar" style="margin-top: 12px;">
-            <div class="btn-group">
-                <button onclick="downloadNotes()">Download Notes</button>
-                <button class="secondary" onclick="clearNotes()">Clear Notes</button>
-            </div>
-            <button class="secondary" onclick="toggleTheme()">Toggle Theme</button>
-        </div>
-    </div>
-</div>
+        <nav class="nav-menu">
+            <button class="nav-btn active" onclick="openTab(event, 'intro')">📌 Inicio & Reglas</button>
+            <button class="nav-btn" onclick="openTab(event, 'sec1')">☁️ 1. Cloud Arch</button>
+            <button class="nav-btn" onclick="openTab(event, 'sec2')">⚙️ 2. Data Platforms</button>
+            <button class="nav-btn" onclick="openTab(event, 'sec3')">📊 3. Analytics</button>
+            <button class="nav-btn" onclick="openTab(event, 'sec4')">🐍 4. Python & API</button>
+            <button class="nav-btn" onclick="openTab(event, 'sec5')">🔐 5. Sec & Ops</button>
+            <button class="nav-btn" onclick="openTab(event, 'workspace')">📝 Workspace</button>
+        </nav>
+    </aside>
 
+    <main class="main-content">
+        <header>
+            <h1>Data Engineering Technical Exam</h1>
+            <p class="subtitle">A long-form assessment designed to validate architecture, cloud services, orchestration, SQL, Python, and fundamental data engineering skills.</p>
+        </header>
+
+        <section id="intro" class="tab-content active-tab">
+            <div class="card">
+                <h2>Exam Instructions</h2>
+                <p>This assessment is structured as a multi-part exam...</p>
+                </div>
+            <h2>Exam Blueprint</h2>
+            <div class="grid">
+                </div>
+        </section>
+
+        <section id="sec1" class="tab-content">
+            <h2>Section 1: Cloud Infrastructure</h2>
+            <div class="grid">
+                </div>
+        </section>
+
+        <section id="sec2" class="tab-content">
+            <h2>Section 2: Orchestration & ETL</h2>
+            <div class="grid">
+                </div>
+        </section>
+
+        <section id="sec3" class="tab-content">
+            <h2>Section 3: SQL & Analytics</h2>
+            <div class="grid">
+                </div>
+        </section>
+
+        <section id="sec4" class="tab-content">
+            <h2>Section 4: Python Engineering</h2>
+            <div class="grid">
+                </div>
+        </section>
+
+        <section id="sec5" class="tab-content">
+            <h2>Section 5: Security & Operations</h2>
+            <div class="grid">
+                </div>
+        </section>
+
+        <section id="workspace" class="tab-content">
+            <h2>Exam Workspace</h2>
+            <div class="card">
+                <div class="challenge-title">Answer Notebook</div>
+                <p class="challenge-desc">Use this space to write notes...</p>
+                <textarea id="exam-notes" placeholder="Write your answer notes here...\n\n1. ..."></textarea>
+                <div class="action-bar" style="margin-top: 12px;">
+                    <div class="btn-group">
+                        <button onclick="downloadNotes()">Download Notes</button>
+                        <button class="secondary" onclick="clearNotes()">Clear Notes</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
 <script src="script.js"></script>
 </body>
 </html>
