@@ -29,32 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function clearNotes() {
-    const textarea = document.getElementById('exam-notes');
-    if (textarea) {
-        textarea.value = '';
-        localStorage.removeItem('examNotes'); // Clear from storage too
-    }
-}
-
-// FEATURE: Download notes as a .txt file
-function downloadNotes() {
-    const text = document.getElementById('exam-notes')?.value;
-    if (!text) {
-        alert("Your notebook is empty!");
-        return;
-    }
-    
-    const blob = new Blob([text], { type: 'text/plain' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'data-eng-exam-notes.txt';
-    
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-
 // FEATURE: Sistema de Navegación por Pestañas (SPA behavior)
 function openTab(evt, tabId) {
     // 1. Ocultar todo el contenido
@@ -77,6 +51,52 @@ function openTab(evt, tabId) {
     if (window.innerWidth <= 850) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+}
+
+// FEATURE: Sistema de Notificaciones Toast
+function showToast(message) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    
+    container.appendChild(toast);
+    
+    // Eliminar el elemento del DOM después de la animación
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+function clearNotes() {
+    const textarea = document.getElementById('exam-notes');
+    if (textarea) {
+        textarea.value = '';
+        localStorage.removeItem('examNotes'); // Clear from storage too
+        showToast('🧹 Notes cleared successfully!');
+    }
+}
+
+// FEATURE: Download notes as a .txt file
+function downloadNotes() {
+    const text = document.getElementById('exam-notes')?.value;
+    if (!text) {
+        showToast('⚠️ Your notebook is empty!');
+        return;
+    }
+    
+    const blob = new Blob([text], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'data-eng-exam-notes.txt';
+    
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    showToast('📥 Notes downloaded successfully!');
 }
 
 // Hacer la función global si usas módulos (no es estrictamente necesario en vanilla, pero buena práctica)
