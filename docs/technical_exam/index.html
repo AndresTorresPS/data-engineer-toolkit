@@ -54,9 +54,99 @@
         </section>
 
         <section id="sec1" class="tab-content">
-            <h2>Section 1: Cloud Infrastructure</h2>
-            <div class="grid">
+            <h2>Section 1: Cloud Architecture</h2>
+            <div class="card quiz-intro">
+                <p>Choose the best answer for each question. Submit when you are finished to receive your grade and a quick performance summary.</p>
+            </div>
+
+            <form id="cloud-quiz" class="quiz-form">
+                <div class="quiz-question">
+                    <h3>1. Which design choice most directly improves disaster recovery in a cloud architecture?</h3>
+                    <label class="option-row"><input type="radio" name="q1" value="A"><span>A. Using a single availability zone only</span></label>
+                    <label class="option-row"><input type="radio" name="q1" value="B" data-correct="true"><span>B. Deploying across multiple regions with replicated data</span></label>
+                    <label class="option-row"><input type="radio" name="q1" value="C"><span>C. Running all services on one VM</span></label>
+                    <label class="option-row"><input type="radio" name="q1" value="D"><span>D. Turning off backups to reduce cost</span></label>
                 </div>
+
+                <div class="quiz-question">
+                    <h3>2. What is the main purpose of a message queue in a distributed system?</h3>
+                    <label class="option-row"><input type="radio" name="q2" value="A"><span>A. To replace databases</span></label>
+                    <label class="option-row"><input type="radio" name="q2" value="B"><span>B. To increase CPU speed</span></label>
+                    <label class="option-row"><input type="radio" name="q2" value="C" data-correct="true"><span>C. To decouple services and buffer workloads</span></label>
+                    <label class="option-row"><input type="radio" name="q2" value="D"><span>D. To encrypt traffic</span></label>
+                </div>
+
+                <div class="quiz-question">
+                    <h3>3. Which principle best supports horizontal scalability?</h3>
+                    <label class="option-row"><input type="radio" name="q3" value="A"><span>A.Using one large monolithic server</span></label>
+                    <label class="option-row"><input type="radio" name="q3" value="B" data-correct="true"><span>B. Designing services to run as stateless instances</span></label>
+                    <label class="option-row"><input type="radio" name="q3" value="C"><span>C. Storing all state in memory on one node</span></label>
+                    <label class="option-row"><input type="radio" name="q3" value="D"><span>D. Avoiding automation</span></label>
+                </div>
+
+                <div class="quiz-question">
+                    <h3>4. Which service is most appropriate for serving static assets globally?</h3>
+                    <label class="option-row"><input type="radio" name="q4" value="A"><span>A. Relational database</span></label>
+                    <label class="option-row"><input type="radio" name="q4" value="B"><span>B. Virtual private network</span></label>
+                    <label class="option-row"><input type="radio" name="q4" value="C" data-correct="true"><span>C. Content delivery network</span></label>
+                    <label class="option-row"><input type="radio" name="q4" value="D"><span>D. Batch scheduler</span></label>
+                </div>
+
+                <div class="quiz-question">
+                    <h3>5. What does Infrastructure as Code primarily help with?</h3>
+                    <label class="option-row"><input type="radio" name="q5" value="A"><span>A. Manual configuration only</span></label>
+                    <label class="option-row"><input type="radio" name="q5" value="B" data-correct="true"><span>B. Reproducible and versioned infrastructure deployment</span></label>
+                    <label class="option-row"><input type="radio" name="q5" value="C"><span>C. Reducing network bandwidth</span></label>
+                    <label class="option-row"><input type="radio" name="q5" value="D"><span>D. Eliminating monitoring needs</span></label>
+                </div>
+
+                <div class="quiz-question">
+                    <h3>6. A load balancer is mainly used to:</h3>
+                    <label class="option-row"><input type="radio" name="q6" value="A"><span>A. Store long-term backups</span></label>
+                    <label class="option-row"><input type="radio" name="q6" value="B"><span>B. Replace application code</span></label>
+                    <label class="option-row"><input type="radio" name="q6" value="C" data-correct="true"><span>C. Distribute traffic across healthy instances</span></label>
+                    <label class="option-row"><input type="radio" name="q6" value="D"><span>D. Encrypt secrets</span></label>
+                </div>
+
+                <div class="quiz-question">
+                    <h3>7. Which practice best supports least-privilege access?</h3>
+                    <label class="option-row"><input type="radio" name="q7" value="A"><span>A. Giving every user admin rights</span></label>
+                    <label class="option-row"><input type="radio" name="q7" value="B"><span>B. Sharing one root account</span></label>
+                    <label class="option-row"><input type="radio" name="q7" value="C" data-correct="true"><span>C. Assigning only the permissions required for a role</span></label>
+                    <label class="option-row"><input type="radio" name="q7" value="D"><span>D. Disabling authentication</span></label>
+                </div>
+
+                <div class="quiz-question">
+                    <h3>8. Which storage pattern is typically best for high-throughput analytics workloads?</h3>
+                    <label class="option-row"><input type="radio" name="q8" value="A"><span>A. Object storage with parallel access</span></label>
+                    <label class="option-row"><input type="radio" name="q8" value="B" data-correct="true"><span>B. Columnar data warehouse storage</span></label>
+                    <label class="option-row"><input type="radio" name="q8" value="C"><span>C. In-memory cache only</span></label>
+                    <label class="option-row"><input type="radio" name="q8" value="D"><span>D. Flat text files on a single laptop</span></label>
+                </div>
+
+                <div class="quiz-question">
+                    <h3>9. What is the key benefit of autoscaling?</h3>
+                    <label class="option-row"><input type="radio" name="q9" value="A"><span>A. It permanently removes the need for monitoring</span></label>
+                    <label class="option-row"><input type="radio" name="q9" value="B"><span>B. It replaces application testing</span></label>
+                    <label class="option-row"><input type="radio" name="q9" value="C" data-correct="true"><span>C. It adjusts capacity based on demand</span></label>
+                    <label class="option-row"><input type="radio" name="q9" value="D"><span>D. It sets a fixed cost ceiling</span></label>
+                </div>
+
+                <div class="quiz-question">
+                    <h3>10. Which statement best describes a well-architected cloud system?</h3>
+                    <label class="option-row"><input type="radio" name="q10" value="A"><span>A. It is only optimized for cost</span></label>
+                    <label class="option-row"><input type="radio" name="q10" value="B"><span>B. It ignores resilience and security</span></label>
+                    <label class="option-row"><input type="radio" name="q10" value="C"><span>C. It prioritizes performance over all else</span></label>
+                    <label class="option-row"><input type="radio" name="q10" value="D" data-correct="true"><span>D. It balances reliability, security, scalability, and cost</span></label>
+                </div>
+
+                <div class="action-bar quiz-actions">
+                    <button type="button" id="cloud-reset" class="secondary">Reset Answers</button>
+                    <button type="submit">Submit Answers</button>
+                </div>
+            </form>
+
+            <div id="cloud-results" class="card result-card" hidden></div>
         </section>
 
         <section id="sec2" class="tab-content">

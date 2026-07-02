@@ -27,7 +27,101 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('examNotes', e.target.value);
         });
     }
+
+    const quizForm = document.getElementById('cloud-quiz');
+    const resetButton = document.getElementById('cloud-reset');
+    const resultsCard = document.getElementById('cloud-results');
+
+    if (quizForm) {
+        quizForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            evaluateCloudQuiz();
+        });
+    }
+
+    if (resetButton) {
+        resetButton.addEventListener('click', resetCloudQuiz);
+    }
+
+    if (resultsCard) {
+        resultsCard.hidden = true;
+    }
 });
+
+function evaluateCloudQuiz() {
+    const quizForm = document.getElementById('cloud-quiz');
+    const resultsCard = document.getElementById('cloud-results');
+
+    if (!quizForm || !resultsCard) return;
+
+    const questionBlocks = quizForm.querySelectorAll('.quiz-question');
+    let correctAnswers = 0;
+    let answeredQuestions = 0;
+    const feedback = [];
+
+    questionBlocks.forEach((block, index) => {
+        const selectedOption = block.querySelector('input[type="radio"]:checked');
+        const correctOption = block.querySelector('input[data-correct="true"]');
+        const optionRows = block.querySelectorAll('.option-row');
+
+        optionRows.forEach((row) => row.classList.remove('correct', 'wrong'));
+
+        if (selectedOption) {
+            answeredQuestions += 1;
+        }
+
+        if (selectedOption && correctOption && selectedOption === correctOption) {
+            correctAnswers += 1;
+            feedback.push(`Q${index + 1}: Correct`);
+        } else {
+            feedback.push(`Q${index + 1}: ${selectedOption ? 'Incorrect' : 'Unanswered'}`);
+        }
+
+        if (correctOption) {
+            correctOption.closest('.option-row')?.classList.add('correct');
+        }
+
+        if (selectedOption && correctOption && selectedOption !== correctOption) {
+            selectedOption.closest('.option-row')?.classList.add('wrong');
+        }
+    });
+
+    const percentage = Math.round((correctAnswers / questionBlocks.length) * 100);
+    let performanceLabel = 'Needs more study';
+
+    if (percentage >= 80) {
+        performanceLabel = 'Excellent work';
+    } else if (percentage >= 60) {
+        performanceLabel = 'Good grasp';
+    } else if (percentage >= 40) {
+        performanceLabel = 'Needs review';
+    }
+
+    resultsCard.hidden = false;
+    resultsCard.innerHTML = `
+        <h3>Cloud Architecture Results</h3>
+        <p class="score-badge">${correctAnswers}/${questionBlocks.length} correct (${percentage}%)</p>
+        <p><strong>${performanceLabel}</strong></p>
+        <p>Answered: ${answeredQuestions}/${questionBlocks.length}</p>
+        <ul class="result-list">
+            ${feedback.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+    `;
+
+    resultsCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetCloudQuiz() {
+    const quizForm = document.getElementById('cloud-quiz');
+    const resultsCard = document.getElementById('cloud-results');
+
+    if (!quizForm || !resultsCard) return;
+
+    quizForm.reset();
+    quizForm.querySelectorAll('.option-row').forEach((row) => row.classList.remove('correct', 'wrong'));
+    resultsCard.hidden = true;
+    resultsCard.innerHTML = '';
+}
 
 // FEATURE: Sistema de Navegación por Pestañas (SPA behavior)
 function openTab(evt, tabId) {
