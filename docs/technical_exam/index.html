@@ -16,6 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,17 +24,17 @@
     <aside class="sidebar">
         <div class="header-top">
             <div class="brand">det • toolkit</div>
-            <button id="theme-toggle" class="icon-btn" onclick="toggleTheme()" aria-label="Toggle Theme"></button>
+            <button id="theme-toggle" class="icon-btn" onclick="toggleTheme()" aria-label="Toggle Theme"><i class="fa-solid fa-moon"></i></button>
         </div>
         
         <nav class="nav-menu">
-            <button class="nav-btn active" onclick="openTab(event, 'intro')">📌 Inicio & Reglas</button>
-            <button class="nav-btn" onclick="openTab(event, 'sec1')">☁️ 1. Cloud Arch</button>
-            <button class="nav-btn" onclick="openTab(event, 'sec2')">⚙️ 2. Data Platforms</button>
-            <button class="nav-btn" onclick="openTab(event, 'sec3')">📊 3. Analytics</button>
-            <button class="nav-btn" onclick="openTab(event, 'sec4')">🐍 4. Python & API</button>
-            <button class="nav-btn" onclick="openTab(event, 'sec5')">🔐 5. Sec & Ops</button>
-            <button class="nav-btn" onclick="openTab(event, 'workspace')">📝 Workspace</button>
+            <button class="nav-btn active" onclick="openTab(event, 'intro')"><i class="nav-icon fa-solid fa-thumbtack"></i><span>Inicio & Reglas</span></button>
+            <button class="nav-btn" onclick="openTab(event, 'sec1')"><i class="nav-icon fa-solid fa-cloud"></i><span>1. Cloud Arch</span></button>
+            <button class="nav-btn" onclick="openTab(event, 'sec2')"><i class="nav-icon fa-solid fa-server"></i><span>2. Data Platforms</span></button>
+            <button class="nav-btn" onclick="openTab(event, 'sec3')"><i class="nav-icon fa-solid fa-chart-line"></i><span>3. Analytics</span></button>
+            <button class="nav-btn" onclick="openTab(event, 'sec4')"><i class="nav-icon fa-solid fa-code"></i><span>4. Python & API</span></button>
+            <button class="nav-btn" onclick="openTab(event, 'sec5')"><i class="nav-icon fa-solid fa-shield-halved"></i><span>5. Sec & Ops</span></button>
+            <button class="nav-btn" onclick="openTab(event, 'workspace')"><i class="nav-icon fa-solid fa-pen-to-square"></i><span>Workspace</span></button>
         </nav>
     </aside>
 

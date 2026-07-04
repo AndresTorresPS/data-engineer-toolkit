@@ -250,6 +250,15 @@ textarea:focus {
   font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-icon {
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
 }
 
 .nav-btn:hover {
