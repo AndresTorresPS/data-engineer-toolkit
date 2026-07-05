@@ -46,7 +46,61 @@ document.addEventListener('DOMContentLoaded', () => {
     if (resultsCard) {
         resultsCard.hidden = true;
     }
+
+    loadCloudQuestions();
 });
+
+async function fetchQuestions(section = 'sec1') {
+    try {
+        const response = await fetch(`/api/questions?section=${encodeURIComponent(section)}`);
+        if (!response.ok) {
+            throw new Error('Failed to load questions');
+        }
+        return response.json();
+    } catch (error) {
+        console.error(error);
+        showToast('⚠️ No se pudieron cargar las preguntas. Revisa el servidor de desarrollo.');
+        return [];
+    }
+}
+
+function renderQuestion(question, index) {
+    return `
+        <div class="quiz-question" data-question-id="${question.id}" data-correct-option="${question.correctOption}">
+            <h3>${index + 1}. ${question.question}</h3>
+            <label class="option-row"><input type="radio" name="q${question.id}" value="A"><span>A. ${question.optionA}</span></label>
+            <label class="option-row"><input type="radio" name="q${question.id}" value="B"><span>B. ${question.optionB}</span></label>
+            <label class="option-row"><input type="radio" name="q${question.id}" value="C"><span>C. ${question.optionC}</span></label>
+            <label class="option-row"><input type="radio" name="q${question.id}" value="D"><span>D. ${question.optionD}</span></label>
+        </div>
+    `;
+}
+
+async function loadCloudQuestions() {
+    const questionsContainer = document.getElementById('cloud-questions');
+    const loadingCard = document.getElementById('cloud-loading');
+    const resultsCard = document.getElementById('cloud-results');
+
+    if (!questionsContainer || !loadingCard) return;
+
+    questionsContainer.innerHTML = '';
+    if (resultsCard) {
+        resultsCard.hidden = true;
+        resultsCard.innerHTML = '';
+    }
+    loadingCard.hidden = false;
+    loadingCard.textContent = 'Loading questions from the development database...';
+
+    const questions = await fetchQuestions('sec1');
+
+    if (questions.length === 0) {
+        loadingCard.textContent = 'No questions found for this section.';
+        return;
+    }
+
+    questionsContainer.innerHTML = questions.map(renderQuestion).join('');
+    loadingCard.hidden = true;
+}
 
 function evaluateCloudQuiz() {
     const quizForm = document.getElementById('cloud-quiz');
@@ -61,7 +115,8 @@ function evaluateCloudQuiz() {
 
     questionBlocks.forEach((block, index) => {
         const selectedOption = block.querySelector('input[type="radio"]:checked');
-        const correctOption = block.querySelector('input[data-correct="true"]');
+        const questionId = block.getAttribute('data-question-id');
+        const correctAnswer = block.dataset.correctOption;
         const optionRows = block.querySelectorAll('.option-row');
 
         optionRows.forEach((row) => row.classList.remove('correct', 'wrong'));
@@ -70,18 +125,21 @@ function evaluateCloudQuiz() {
             answeredQuestions += 1;
         }
 
-        if (selectedOption && correctOption && selectedOption === correctOption) {
+        const selectedValue = selectedOption ? selectedOption.value : null;
+
+        if (selectedValue && correctAnswer && selectedValue === correctAnswer) {
             correctAnswers += 1;
             feedback.push(`Q${index + 1}: Correct`);
         } else {
-            feedback.push(`Q${index + 1}: ${selectedOption ? 'Incorrect' : 'Unanswered'}`);
+            feedback.push(`Q${index + 1}: ${selectedValue ? 'Incorrect' : 'Unanswered'}`);
         }
 
-        if (correctOption) {
-            correctOption.closest('.option-row')?.classList.add('correct');
+        const correctRow = Array.from(optionRows).find((row) => row.querySelector(`input[value="${correctAnswer}"]`));
+        if (correctRow) {
+            correctRow.classList.add('correct');
         }
 
-        if (selectedOption && correctOption && selectedOption !== correctOption) {
+        if (selectedOption && selectedValue !== correctAnswer) {
             selectedOption.closest('.option-row')?.classList.add('wrong');
         }
     });
