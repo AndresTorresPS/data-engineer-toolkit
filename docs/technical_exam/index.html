@@ -34,6 +34,7 @@
             <button class="nav-btn" onclick="openTab(event, 'sec3')"><i class="nav-icon fa-solid fa-chart-line"></i><span>3. Analytics</span></button>
             <button class="nav-btn" onclick="openTab(event, 'sec4')"><i class="nav-icon fa-solid fa-code"></i><span>4. Python & API</span></button>
             <button class="nav-btn" onclick="openTab(event, 'sec5')"><i class="nav-icon fa-solid fa-shield-halved"></i><span>5. Sec & Ops</span></button>
+            <button class="nav-btn" onclick="openTab(event, 'admin')"><i class="nav-icon fa-solid fa-user-shield"></i><span>Admin</span></button>
             <button class="nav-btn" onclick="openTab(event, 'workspace')"><i class="nav-icon fa-solid fa-pen-to-square"></i><span>Workspace</span></button>
         </nav>
     </aside>
@@ -95,6 +96,87 @@
             <h2>Section 5: Security & Operations</h2>
             <div class="grid">
                 </div>
+        </section>
+
+        <section id="admin" class="tab-content">
+            <h2>Admin</h2>
+            <div class="card">
+                <div class="challenge-title">Development Database Editor</div>
+                <p class="challenge-desc">Create, update and delete questions directly in the development database.</p>
+
+                <form id="admin-form" class="quiz-form">
+                    <input type="hidden" id="admin-question-id" value="">
+                    <div class="grid">
+                        <div class="card">
+                            <label class="explorer-label" for="admin-section">Section</label>
+                            <select id="admin-section">
+                                <option value="sec1">sec1</option>
+                                <option value="sec2">sec2</option>
+                                <option value="sec3">sec3</option>
+                                <option value="sec4">sec4</option>
+                                <option value="sec5">sec5</option>
+                            </select>
+
+                            <label class="explorer-label" for="admin-question">Question</label>
+                            <textarea id="admin-question" rows="3" placeholder="Write the question text..."></textarea>
+                        </div>
+
+                        <div class="card">
+                            <label class="explorer-label" for="admin-optionA">Option A</label>
+                            <input id="admin-optionA" type="text" placeholder="Option A text">
+
+                            <label class="explorer-label" for="admin-optionB">Option B</label>
+                            <input id="admin-optionB" type="text" placeholder="Option B text">
+
+                            <label class="explorer-label" for="admin-optionC">Option C</label>
+                            <input id="admin-optionC" type="text" placeholder="Option C text">
+
+                            <label class="explorer-label" for="admin-optionD">Option D</label>
+                            <input id="admin-optionD" type="text" placeholder="Option D text">
+
+                            <label class="explorer-label" for="admin-correct-option">Correct Answer</label>
+                            <select id="admin-correct-option">
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="action-bar quiz-actions">
+                        <button type="submit" id="admin-save">Save question</button>
+                        <button type="button" class="secondary" id="admin-reset">Reset form</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card" style="margin-top: 24px;">
+                <div class="explorer-controls">
+                    <label for="admin-filter-section">Filter by section</label>
+                    <select id="admin-filter-section">
+                        <option value="sec1">sec1</option>
+                        <option value="sec2">sec2</option>
+                        <option value="sec3">sec3</option>
+                        <option value="sec4">sec4</option>
+                        <option value="sec5">sec5</option>
+                    </select>
+                    <button type="button" id="admin-refresh">Refresh list</button>
+                </div>
+
+                <table class="preview-table" id="admin-questions-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Section</th>
+                            <th>Question</th>
+                            <th>Correct</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </section>
 
         <section id="workspace" class="tab-content">

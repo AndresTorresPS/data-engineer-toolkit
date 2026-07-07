@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     loadCloudQuestions();
+    initializeAdmin();
 });
 
 async function fetchQuestions(section = 'sec1') {
@@ -100,6 +101,196 @@ async function loadCloudQuestions() {
 
     questionsContainer.innerHTML = questions.map(renderQuestion).join('');
     loadingCard.hidden = true;
+}
+
+function getAdminFields() {
+    return {
+        id: document.getElementById('admin-question-id').value,
+        section: document.getElementById('admin-section').value,
+        question: document.getElementById('admin-question').value.trim(),
+        optionA: document.getElementById('admin-optionA').value.trim(),
+        optionB: document.getElementById('admin-optionB').value.trim(),
+        optionC: document.getElementById('admin-optionC').value.trim(),
+        optionD: document.getElementById('admin-optionD').value.trim(),
+        correctOption: document.getElementById('admin-correct-option').value,
+    };
+}
+
+function setAdminFields({ id = '', section = 'sec1', question = '', optionA = '', optionB = '', optionC = '', optionD = '', correctOption = 'A' } = {}) {
+    document.getElementById('admin-question-id').value = id;
+    document.getElementById('admin-section').value = section;
+    document.getElementById('admin-question').value = question;
+    document.getElementById('admin-optionA').value = optionA;
+    document.getElementById('admin-optionB').value = optionB;
+    document.getElementById('admin-optionC').value = optionC;
+    document.getElementById('admin-optionD').value = optionD;
+    document.getElementById('admin-correct-option').value = correctOption;
+}
+
+function renderAdminRow(question) {
+    return `
+        <tr data-id="${question.id}">
+            <td>${question.id}</td>
+            <td>${question.section}</td>
+            <td>${question.question}</td>
+            <td>${question.correctOption}</td>
+            <td>
+                <button type="button" class="secondary admin-edit-btn" data-id="${question.id}">Edit</button>
+                <button type="button" class="secondary admin-delete-btn" data-id="${question.id}">Delete</button>
+            </td>
+        </tr>
+    `;
+}
+
+async function loadAdminQuestions(section = 'sec1') {
+    const tableBody = document.querySelector('#admin-questions-table tbody');
+    if (!tableBody) return;
+
+    tableBody.innerHTML = '<tr><td colspan="5">Loading questions...</td></tr>';
+
+    const questions = await fetchQuestions(section);
+
+    if (questions.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="5">No questions found for this section.</td></tr>';
+        return;
+    }
+
+    tableBody.innerHTML = questions.map(renderAdminRow).join('');
+    attachAdminRowListeners();
+}
+
+function attachAdminRowListeners() {
+    document.querySelectorAll('.admin-edit-btn').forEach((button) => {
+        button.addEventListener('click', async (event) => {
+            const id = event.currentTarget.dataset.id;
+            if (id) {
+                await loadAdminQuestion(id);
+            }
+        });
+    });
+
+    document.querySelectorAll('.admin-delete-btn').forEach((button) => {
+        button.addEventListener('click', async (event) => {
+            const id = event.currentTarget.dataset.id;
+            if (id && confirm('Delete this question from the development database?')) {
+                await deleteAdminQuestion(id);
+            }
+        });
+    });
+}
+
+async function loadAdminQuestion(id) {
+    try {
+        const response = await fetch(`/api/questions/${encodeURIComponent(id)}`);
+        if (!response.ok) {
+            throw new Error('Failed to load question');
+        }
+        const question = await response.json();
+        setAdminFields(question);
+        showToast('✅ Question loaded for editing');
+    } catch (error) {
+        console.error(error);
+        showToast('⚠️ No se pudo cargar la pregunta para edición.');
+    }
+}
+
+function resetAdminForm() {
+    setAdminFields();
+    showToast('Formulario de administración reiniciado.');
+}
+
+async function saveAdminQuestion(event) {
+    event.preventDefault();
+    const questionData = getAdminFields();
+    const hasId = Boolean(questionData.id);
+    const url = hasId ? `/api/questions/${encodeURIComponent(questionData.id)}` : '/api/questions';
+    const method = hasId ? 'PUT' : 'POST';
+
+    const body = {
+        section: questionData.section,
+        question: questionData.question,
+        optionA: questionData.optionA,
+        optionB: questionData.optionB,
+        optionC: questionData.optionC,
+        optionD: questionData.optionD,
+        correctOption: questionData.correctOption,
+    };
+
+    if (!body.question || !body.optionA || !body.optionB || !body.optionC || !body.optionD) {
+        showToast('⚠️ Completa todos los campos antes de guardar.');
+        return;
+    }
+
+    try {
+        const response = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to save question');
+        }
+
+        resetAdminForm();
+        loadAdminQuestions(document.getElementById('admin-filter-section').value);
+        showToast(`✅ Pregunta ${hasId ? 'actualizada' : 'creada'} correctamente`);
+    } catch (error) {
+        console.error(error);
+        showToast('⚠️ Error al guardar la pregunta.');
+    }
+}
+
+async function deleteAdminQuestion(id) {
+    try {
+        const response = await fetch(`/api/questions/${encodeURIComponent(id)}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to delete question');
+        }
+
+        loadAdminQuestions(document.getElementById('admin-filter-section').value);
+        showToast('✅ Pregunta eliminada correctamente');
+    } catch (error) {
+        console.error(error);
+        showToast('⚠️ Error al eliminar la pregunta.');
+    }
+}
+
+function addAdminEventListeners() {
+    const adminForm = document.getElementById('admin-form');
+    const adminReset = document.getElementById('admin-reset');
+    const adminRefresh = document.getElementById('admin-refresh');
+    const sectionFilter = document.getElementById('admin-filter-section');
+
+    if (adminForm) {
+        adminForm.addEventListener('submit', saveAdminQuestion);
+    }
+
+    if (adminReset) {
+        adminReset.addEventListener('click', resetAdminForm);
+    }
+
+    if (adminRefresh) {
+        adminRefresh.addEventListener('click', () => {
+            loadAdminQuestions(sectionFilter.value);
+        });
+    }
+
+    if (sectionFilter) {
+        sectionFilter.addEventListener('change', () => {
+            loadAdminQuestions(sectionFilter.value);
+        });
+    }
+}
+
+function initializeAdmin() {
+    addAdminEventListeners();
+    loadAdminQuestions(document.getElementById('admin-filter-section').value);
 }
 
 function evaluateCloudQuiz() {

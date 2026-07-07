@@ -105,6 +105,79 @@ app.get('/api/questions', (req, res) => {
   });
 });
 
+app.get('/api/questions/:id', (req, res) => {
+  const sql = 'SELECT id, section, question, optionA, optionB, optionC, optionD, correctOption FROM questions WHERE id = ?';
+  db.get(sql, [req.params.id], (err, row) => {
+    if (err) {
+      console.error('Failed fetching question:', err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    if (!row) {
+      return res.status(404).json({ error: 'Question not found' });
+    }
+    res.json(row);
+  });
+});
+
+app.post('/api/questions', (req, res) => {
+  const { section, question, optionA, optionB, optionC, optionD, correctOption } = req.body;
+
+  if (!section || !question || !optionA || !optionB || !optionC || !optionD || !correctOption) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  const sql = `
+    INSERT INTO questions (section, question, optionA, optionB, optionC, optionD, correctOption)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  db.run(sql, [section, question, optionA, optionB, optionC, optionD, correctOption], function (err) {
+    if (err) {
+      console.error('Failed creating question:', err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    res.status(201).json({ id: this.lastID });
+  });
+});
+
+app.put('/api/questions/:id', (req, res) => {
+  const { section, question, optionA, optionB, optionC, optionD, correctOption } = req.body;
+
+  if (!section || !question || !optionA || !optionB || !optionC || !optionD || !correctOption) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  const sql = `
+    UPDATE questions SET section = ?, question = ?, optionA = ?, optionB = ?, optionC = ?, optionD = ?, correctOption = ?
+    WHERE id = ?
+  `;
+
+  db.run(sql, [section, question, optionA, optionB, optionC, optionD, correctOption, req.params.id], function (err) {
+    if (err) {
+      console.error('Failed updating question:', err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: 'Question not found' });
+    }
+    res.json({ updated: true });
+  });
+});
+
+app.delete('/api/questions/:id', (req, res) => {
+  const sql = 'DELETE FROM questions WHERE id = ?';
+  db.run(sql, [req.params.id], function (err) {
+    if (err) {
+      console.error('Failed deleting question:', err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: 'Question not found' });
+    }
+    res.json({ deleted: true });
+  });
+});
+
 app.get('/api/quiz/sections', (req, res) => {
   db.all('SELECT DISTINCT section FROM questions ORDER BY section', (err, rows) => {
     if (err) {
