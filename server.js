@@ -4,7 +4,7 @@ const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const dbPath = path.join(__dirname, 'dev.db');
+const dbPath = process.env.DB_PATH || path.join(__dirname, 'docs', 'technical_exam', 'dev_questions.db');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'docs')));
@@ -82,7 +82,7 @@ function initDb() {
             if (insertError) {
               console.error('Failed seeding questions table:', insertError);
             } else {
-              console.log('Seeded development questions into dev.db');
+              console.log(`Seeded development questions into ${dbPath}`);
             }
           });
         }

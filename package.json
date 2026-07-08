@@ -5,6 +5,9 @@
   "scripts": {
     "start": "node server.js"
   },
+  "config": {
+    "dbPath": "docs/technical_exam/dev_questions.db"
+  },
   "dependencies": {
     "express": "^4.18.2",
     "sqlite3": "^5.1.6"
