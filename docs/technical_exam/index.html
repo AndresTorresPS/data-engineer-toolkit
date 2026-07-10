@@ -113,14 +113,19 @@
 
         <section id="admin" class="tab-content">
             <h2>Admin</h2>
-            <div class="card">
-                <div class="challenge-title">Development Database Editor</div>
-                <p class="challenge-desc">Create, update and delete questions directly in the development database.</p>
+            <div class="card admin-panel-card">
+                <div class="admin-header">
+                    <div>
+                        <div class="challenge-title">Development Database Editor</div>
+                        <p class="challenge-desc">Create, update and delete questions directly in the development database.</p>
+                    </div>
+                    <button type="button" id="admin-restore" class="secondary">Restore defaults</button>
+                </div>
 
-                <form id="admin-form" class="quiz-form">
+                <form id="admin-form" class="quiz-form admin-form">
                     <input type="hidden" id="admin-question-id" value="">
-                    <div class="grid">
-                        <div class="card">
+                    <div class="grid admin-grid">
+                        <div class="card admin-editor-card">
                             <label class="explorer-label" for="admin-section">Section</label>
                             <select id="admin-section">
                                 <option value="sec1">sec1</option>
@@ -134,7 +139,7 @@
                             <textarea id="admin-question" rows="3" placeholder="Write the question text..."></textarea>
                         </div>
 
-                        <div class="card">
+                        <div class="card admin-editor-card">
                             <label class="explorer-label" for="admin-optionA">Option A</label>
                             <input id="admin-optionA" type="text" placeholder="Option A text">
 
@@ -157,14 +162,14 @@
                         </div>
                     </div>
 
-                    <div class="action-bar quiz-actions">
+                    <div class="action-bar quiz-actions admin-actions">
                         <button type="submit" id="admin-save">Save question</button>
                         <button type="button" class="secondary" id="admin-reset">Reset form</button>
                     </div>
                 </form>
             </div>
 
-            <div class="card" style="margin-top: 24px;">
+            <div class="card admin-list-card" style="margin-top: 24px;">
                 <div class="explorer-controls">
                     <label for="admin-filter-section">Filter by section</label>
                     <select id="admin-filter-section">

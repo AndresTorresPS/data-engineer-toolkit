@@ -472,6 +472,76 @@ textarea:focus {
   opacity: 0.85;
 }
 
+/* Admin CRUD */
+.admin-panel-card {
+  padding: 24px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.admin-header .challenge-title {
+  margin-bottom: 6px;
+}
+
+.admin-form .card {
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+
+.admin-form textarea {
+  min-height: 110px;
+  background: var(--accent-light);
+}
+
+.admin-form input:focus,
+.admin-form select:focus,
+.admin-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(217, 119, 54, 0.12);
+}
+
+.admin-actions {
+  justify-content: flex-end;
+}
+
+.admin-list-card {
+  overflow: hidden;
+}
+
+.preview-table tbody tr:hover {
+  background: var(--accent-light);
+}
+
+.preview-table td:last-child {
+  white-space: nowrap;
+}
+
+.preview-table .secondary {
+  margin-right: 8px;
+}
+
 /* Tables */
 table, .preview-table {
   width: 100%;

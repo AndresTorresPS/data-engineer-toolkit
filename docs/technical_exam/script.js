@@ -179,6 +179,37 @@ async function loadAdminQuestions(section = 'sec1') {
     attachAdminRowListeners();
 }
 
+async function restoreAdminQuestions() {
+    if (!confirm('Restore the default question set? This will delete all current questions and replace them with the built-in seed data.')) {
+        return;
+    }
+
+    const restoreButton = document.getElementById('admin-restore');
+    if (restoreButton) {
+        restoreButton.disabled = true;
+        restoreButton.textContent = 'Restoring...';
+    }
+
+    try {
+        const response = await fetch('/api/questions/restore', { method: 'POST' });
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to restore questions');
+        }
+
+        await loadAdminQuestions(document.getElementById('admin-filter-section').value);
+        showToast('✅ Default questions restored successfully');
+    } catch (error) {
+        console.error(error);
+        showToast('⚠️ Error restoring default questions.');
+    } finally {
+        if (restoreButton) {
+            restoreButton.disabled = false;
+            restoreButton.textContent = 'Restore defaults';
+        }
+    }
+}
+
 function attachAdminRowListeners() {
     document.querySelectorAll('.admin-edit-btn').forEach((button) => {
         button.addEventListener('click', async (event) => {
@@ -285,6 +316,7 @@ function addAdminEventListeners() {
     const adminForm = document.getElementById('admin-form');
     const adminReset = document.getElementById('admin-reset');
     const adminRefresh = document.getElementById('admin-refresh');
+    const adminRestore = document.getElementById('admin-restore');
     const sectionFilter = document.getElementById('admin-filter-section');
 
     if (adminForm) {
@@ -299,6 +331,10 @@ function addAdminEventListeners() {
         adminRefresh.addEventListener('click', () => {
             loadAdminQuestions(sectionFilter.value);
         });
+    }
+
+    if (adminRestore) {
+        adminRestore.addEventListener('click', restoreAdminQuestions);
     }
 
     if (sectionFilter) {

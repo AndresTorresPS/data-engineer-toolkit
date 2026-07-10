@@ -98,6 +98,22 @@ VALUES
    'There is no practical difference', 'Batch processes fixed datasets at intervals; streams process continuous data in real-time',
    'Streaming is always slower than batch', 'Batch is only for SQL databases', 'B');`;
 
+function restoreSeedData() {
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      db.run('DELETE FROM questions', (deleteError) => {
+        if (deleteError) return reject(deleteError);
+
+        db.run(seedDataSql, (insertError) => {
+          if (insertError) return reject(insertError);
+          console.log(`Restored default questions into ${dbPath}`);
+          resolve();
+        });
+      });
+    });
+  });
+}
+
 function initDb() {
   return new Promise((resolve, reject) => {
     db.serialize(() => {
@@ -121,6 +137,16 @@ function initDb() {
     });
   });
 }
+
+app.post('/api/questions/restore', async (req, res) => {
+  try {
+    await restoreSeedData();
+    res.json({ restored: true });
+  } catch (error) {
+    console.error('Restore seed data error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // API Routes
 app.get('/api/questions', (req, res) => {
