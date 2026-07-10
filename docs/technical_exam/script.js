@@ -47,7 +47,27 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsCard.hidden = true;
     }
 
+    const etlQuizForm = document.getElementById('etl-quiz');
+    const etlResetButton = document.getElementById('etl-reset');
+    const etlResultsCard = document.getElementById('etl-results');
+
+    if (etlQuizForm) {
+        etlQuizForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            evaluateEtlQuiz();
+        });
+    }
+
+    if (etlResetButton) {
+        etlResetButton.addEventListener('click', resetEtlQuiz);
+    }
+
+    if (etlResultsCard) {
+        etlResultsCard.hidden = true;
+    }
+
     loadCloudQuestions();
+    loadEtlQuestions();
     initializeAdmin();
 });
 
@@ -363,6 +383,111 @@ function evaluateCloudQuiz() {
 function resetCloudQuiz() {
     const quizForm = document.getElementById('cloud-quiz');
     const resultsCard = document.getElementById('cloud-results');
+
+    if (!quizForm || !resultsCard) return;
+
+    quizForm.reset();
+    quizForm.querySelectorAll('.option-row').forEach((row) => row.classList.remove('correct', 'wrong'));
+    resultsCard.hidden = true;
+    resultsCard.innerHTML = '';
+}
+
+async function loadEtlQuestions() {
+    const questionsContainer = document.getElementById('etl-questions');
+    const loadingCard = document.getElementById('etl-loading');
+    const resultsCard = document.getElementById('etl-results');
+
+    if (!questionsContainer || !loadingCard) return;
+
+    questionsContainer.innerHTML = '';
+    if (resultsCard) {
+        resultsCard.hidden = true;
+        resultsCard.innerHTML = '';
+    }
+    loadingCard.hidden = false;
+    loadingCard.textContent = 'Loading questions from the development database...';
+
+    const questions = await fetchQuestions('sec2');
+
+    if (questions.length === 0) {
+        loadingCard.textContent = 'No questions found for this section.';
+        return;
+    }
+
+    questionsContainer.innerHTML = questions.map(renderQuestion).join('');
+    loadingCard.hidden = true;
+}
+
+function evaluateEtlQuiz() {
+    const quizForm = document.getElementById('etl-quiz');
+    const resultsCard = document.getElementById('etl-results');
+
+    if (!quizForm || !resultsCard) return;
+
+    const questionBlocks = quizForm.querySelectorAll('.quiz-question');
+    let correctAnswers = 0;
+    let answeredQuestions = 0;
+    const feedback = [];
+
+    questionBlocks.forEach((block, index) => {
+        const selectedOption = block.querySelector('input[type="radio"]:checked');
+        const questionId = block.getAttribute('data-question-id');
+        const correctAnswer = block.dataset.correctOption;
+        const optionRows = block.querySelectorAll('.option-row');
+
+        optionRows.forEach((row) => row.classList.remove('correct', 'wrong'));
+
+        if (selectedOption) {
+            answeredQuestions += 1;
+        }
+
+        const selectedValue = selectedOption ? selectedOption.value : null;
+
+        if (selectedValue && correctAnswer && selectedValue === correctAnswer) {
+            correctAnswers += 1;
+            feedback.push(`Q${index + 1}: Correct`);
+        } else {
+            feedback.push(`Q${index + 1}: ${selectedValue ? 'Incorrect' : 'Unanswered'}`);
+        }
+
+        const correctRow = Array.from(optionRows).find((row) => row.querySelector(`input[value="${correctAnswer}"]`));
+        if (correctRow) {
+            correctRow.classList.add('correct');
+        }
+
+        if (selectedOption && selectedValue !== correctAnswer) {
+            selectedOption.closest('.option-row')?.classList.add('wrong');
+        }
+    });
+
+    const percentage = Math.round((correctAnswers / questionBlocks.length) * 100);
+    let performanceLabel = 'Needs more study';
+
+    if (percentage >= 80) {
+        performanceLabel = 'Excellent work';
+    } else if (percentage >= 60) {
+        performanceLabel = 'Good grasp';
+    } else if (percentage >= 40) {
+        performanceLabel = 'Needs review';
+    }
+
+    resultsCard.hidden = false;
+    resultsCard.innerHTML = `
+        <h3>Orchestration & ETL Results</h3>
+        <p class="score-badge">${correctAnswers}/${questionBlocks.length} correct (${percentage}%)</p>
+        <p><strong>${performanceLabel}</strong></p>
+        <p>Answered: ${answeredQuestions}/${questionBlocks.length}</p>
+        <ul class="result-list">
+            ${feedback.map(item => `<li>${item}</li>`).join('')}
+        </ul>
+    `;
+
+    resultsCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetEtlQuiz() {
+    const quizForm = document.getElementById('etl-quiz');
+    const resultsCard = document.getElementById('etl-results');
 
     if (!quizForm || !resultsCard) return;
 

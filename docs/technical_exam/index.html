@@ -76,8 +76,21 @@
 
         <section id="sec2" class="tab-content">
             <h2>Section 2: Orchestration & ETL</h2>
-            <div class="grid">
+            <div class="card quiz-intro">
+                <p>Choose the best answer for each question. Submit when you are finished to receive your grade and a quick performance summary.</p>
+            </div>
+
+            <form id="etl-quiz" class="quiz-form">
+                <div id="etl-questions" class="quiz-questions"></div>
+
+                <div class="action-bar quiz-actions">
+                    <button type="button" id="etl-reset" class="secondary">Reset Answers</button>
+                    <button type="submit">Submit Answers</button>
                 </div>
+            </form>
+
+            <div id="etl-loading" class="card result-card">Loading questions from the development database...</div>
+            <div id="etl-results" class="card result-card" hidden></div>
         </section>
 
         <section id="sec3" class="tab-content">
