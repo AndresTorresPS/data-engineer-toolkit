@@ -1,5 +1,4 @@
 import sqlite3
-from datetime import datetime, timedelta
 
 DB_PATH = "training/sql_sandbox/ecommerce.db"
 
@@ -40,6 +39,7 @@ def bootstrap():
     orders_data = [
         (101, 1, 150.50, "COMPLETED", "2026-01-05 12:00:00"),
         (102, 2, -20.00, "COMPLETED", "2026-01-06 13:00:00"), # INTENTIONAL NEGATIVE AMOUNT
+        (105, 3, 25.00, "PENDING", "2026-02-07 14:22:00"),
         (103, 3, 75.00, "PENDING", "2026-01-07 14:22:00"),
         (104, 1, 300.00, "COMPLETED", "2026-01-08 09:00:00")
     ]
